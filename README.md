@@ -56,6 +56,6 @@
   * życie
   * obrażenia
   * metoda znajdowania budynków (najbliższy/priorytet na obronne)
-*schowek
+* schowek
   * trzyma budynki
   * pozwala na zatwierdzenie zmiany budynków, gdy jest pusty
