@@ -1,2 +1,9 @@
+from gui.gui import Gui
+from engine.engine import Engine
+
+
 if __name__ == '__main__':
-    pass
+    engine = Engine(15)
+    app = Gui(engine)
+    app.run()
+
