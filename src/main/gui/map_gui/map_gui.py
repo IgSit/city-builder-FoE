@@ -17,8 +17,7 @@ class MapGui:
                 polygon = self.isometric_map[x][y]
                 polygon = [(x + self.screen_width // 2, y + self.screen_height // 16) for x, y in polygon]
                 arcade.draw_polygon_outline(polygon, arcade.csscolor.GOLD)
-
-        arcade.finish_render()
+        # arcade.finish_render()
 
     def _create_map(self):
         return [[self._create_grid(x, y) for x in range(self.map.length)] for y in range(self.map.width)]
@@ -35,6 +34,16 @@ class MapGui:
 
         return [self._cartesian_to_isometric(x, y) for x, y in rectangle]
 
+    def place_on_map(self, x: int, y: int):
+        polygon = self.isometric_map[x][y]
+        polygon = [(x + self.screen_width // 2, y + self.screen_height // 16) for x, y in polygon]
+        arcade.draw_polygon_filled(polygon, arcade.csscolor.GREEN)
+
+    def mark_field(self, x: int, y: int):
+        polygon = self.isometric_map[x][y]
+        polygon = [(x + self.screen_width // 2, y + self.screen_height // 16) for x, y in polygon]
+        arcade.draw_polygon_filled(polygon, arcade.csscolor.GREEN)
+
     @staticmethod
     def _cartesian_to_isometric(x: int, y: int):
-        return [x - y, (x + y) / 2]
+        return [x - y, (x + y) / 3]

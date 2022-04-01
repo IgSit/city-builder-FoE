@@ -3,7 +3,7 @@ from engine.engine import Engine
 
 
 if __name__ == '__main__':
-    engine = Engine(15)
+    engine = Engine(12)
     app = Gui(engine)
     app.run()
 
