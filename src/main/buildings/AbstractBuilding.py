@@ -12,5 +12,5 @@ class AbstractBuilding(ABC):
         self.asset_path = asset_path
         self.dimensions = dimensions
         self.cost = cost
-        self.building_sprite = arcade.Sprite(asset_path, 1.5)
+        self.building_sprite = arcade.Sprite(asset_path, scale=1.5)
 

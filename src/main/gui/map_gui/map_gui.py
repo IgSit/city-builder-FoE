@@ -34,6 +34,12 @@ class MapGui:
 
         return [self._cartesian_to_isometric(x, y) for x, y in rectangle]
 
+    def draw_free_fields(self):
+        for i, row in enumerate(self.map.free):
+            for j, field_free in enumerate(row):
+                if field_free:
+                    self.mark_field(i, j)
+
     def place_on_map(self, x: int, y: int):
         polygon = self.isometric_map[x][y]
         polygon = [(x + self.screen_width // 2, y + self.screen_height // 16) for x, y in polygon]
