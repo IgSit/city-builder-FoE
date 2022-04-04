@@ -14,12 +14,10 @@ import arcade
 class Gui(arcade.Window):
     def __init__(self, run_engine: Engine):
         self.engine = run_engine
-        self.map_gui = MapGui(run_engine.map)
-        self.buildings_gui = BuildingsGui(self)
+        self.map_gui = MapGui(run_engine.map_)
+        self.buildings_gui = BuildingsGui(run_engine.buildings)
         self.buttons_gui = ButtonsGui(self)
-
         self.screen_width, self.screen_height = arcade.window_commands.get_display_size()
-        self.build_mode = False
         super().__init__(1000, 800, fullscreen=True)
 
     def run(self):
@@ -32,18 +30,22 @@ class Gui(arcade.Window):
 
     def on_draw(self):
         self.clear()
-        if self.build_mode:
+        if self.engine.buildings.build_mode:
             self.map_gui.draw_free_fields()
         self.map_gui.draw_map()
-        if self.build_mode:
-            self.buildings_gui.building_sprites.draw()
+        if self.engine.buildings.build_mode:
+            self.map_gui.find_field_under_mouse()
+            self.buildings_gui.draw_chosen_building()
+        self.buildings_gui.draw_buildings_on_map()
         self.buttons_gui.draw_all()
 
     def on_mouse_press(self, x: float, y: float, button: int, modifiers: int):
-        self.buttons_gui.are_buttons_pressed(x, y)
+        if button == 1:
+            self.buttons_gui.are_buttons_pressed(x, y)
+        if button == 4:
+            self.buildings_gui.set_chosen_coords(self.map_gui.get_chosen_field_middle_point())
+            self.engine.place_chosen_on_map()
 
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
-        self.buildings_gui.set_chosen_building_coords(x, y)
-
-    def change_mode(self):
-        self.build_mode = not self.build_mode
+        self.buildings_gui.set_chosen_coords((x, y))
+        self.map_gui.set_mouse_at_field(x, y)
