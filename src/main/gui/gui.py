@@ -42,6 +42,14 @@ class Gui(arcade.Window):
     def on_mouse_press(self, x: float, y: float, button: int, modifiers: int):
         self.buttons_gui.are_buttons_pressed(x, y)
 
+    def on_mouse_drag(self, x: float, y: float, dx: float, dy: float, buttons: int, modifiers: int):
+        if buttons == 2:  # middle mouse button
+            self.map_gui.x_offset += dx
+            self.map_gui.y_offset += dy
+            self.map_gui.x_offset = min(max(self.map_gui.x_offset, -500), 500)
+            self.map_gui.y_offset = min(max(self.map_gui.y_offset, -250), 350)
+            self.map_gui.draw_map()
+
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
         self.buildings_gui.set_chosen_building_coords(x, y)
 

@@ -13,7 +13,8 @@ class ButtonsGui:
         button = Button(title, x_es, y_es, action)
         self.button_list.append(button)
 
-    def _draw_button(self, x_es: (int, int), y_es: (int, int)):
+    @staticmethod
+    def _draw_button(x_es: (int, int), y_es: (int, int)):
         x1, x2 = x_es
         y1, y2 = y_es
         arcade.draw_polygon_filled([(x1, y1), (x2, y1), (x2, y2), (x1, y2)], arcade.csscolor.GOLD)

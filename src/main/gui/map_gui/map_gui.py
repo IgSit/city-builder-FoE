@@ -1,5 +1,4 @@
 import arcade.window_commands
-
 from ...map.map import Map
 
 
@@ -10,14 +9,15 @@ class MapGui:
         self.tile_size = 64
         self.screen_width, self.screen_height = arcade.window_commands.get_display_size()
         self.isometric_map = self._create_map()
+        self.x_offset, self.y_offset = 0, 0
 
     def draw_map(self):
         for x in range(self.map.length):
             for y in range(self.map.width):
                 polygon = self.isometric_map[x][y]
-                polygon = [(x + self.screen_width // 2, y + self.screen_height // 16) for x, y in polygon]
+                polygon = [(x + self.x_offset + self.screen_width // 2,
+                            y + self.y_offset + self.screen_height // 16) for x, y in polygon]
                 arcade.draw_polygon_outline(polygon, arcade.csscolor.GOLD)
-        # arcade.finish_render()
 
     def _create_map(self):
         return [[self._create_grid(x, y) for x in range(self.map.length)] for y in range(self.map.width)]
@@ -31,7 +31,6 @@ class MapGui:
             (length + self.tile_size, height + self.tile_size),
             (length, height + self.tile_size)
         )
-
         return [self._cartesian_to_isometric(x, y) for x, y in rectangle]
 
     def draw_free_fields(self):
@@ -47,9 +46,10 @@ class MapGui:
 
     def mark_field(self, x: int, y: int):
         polygon = self.isometric_map[x][y]
-        polygon = [(x + self.screen_width // 2, y + self.screen_height // 16) for x, y in polygon]
+        polygon = [(x + self.x_offset + self.screen_width // 2,
+                    y + self.y_offset + self.screen_height // 16) for x, y in polygon]
         arcade.draw_polygon_filled(polygon, arcade.csscolor.GREEN)
 
     @staticmethod
     def _cartesian_to_isometric(x: int, y: int):
-        return [x - y, (x + y) / 3]
+        return [x - y, (x + y) / 2]
