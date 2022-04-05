@@ -16,3 +16,4 @@ class AbstractBuilding(ABC):
         self.x_coord = 0
         self.y_coord = 0
         self.sprite = arcade.Sprite(asset_path, scale=0.6)
+

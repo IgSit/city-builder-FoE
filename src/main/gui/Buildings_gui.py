@@ -5,7 +5,8 @@ from src.main.buildings.util_classes.Dimensions import Dimensions
 
 
 class BuildingsGui:
-    def __init__(self, buildings):
+    def __init__(self, buildings, tile_size: int = 64):
+        self.tile_size = tile_size
         self.buildings = buildings
         self.building_sprites = arcade.SpriteList()
         self.building_sprites.append(self.buildings.chosen.sprite)
@@ -13,14 +14,16 @@ class BuildingsGui:
     def set_chosen_coords(self, point: (float, float)):
         if self.buildings.build_mode and self.buildings.chosen is not None:
             x, y = point
+            scale = self.buildings.chosen.sprite.scale
             self.buildings.chosen.sprite.center_x = x
-            self.buildings.chosen.sprite.center_y = y
+            self.buildings.chosen.sprite.bottom = y - self.tile_size/2*(1-(0.78-scale))
 
     def set_chosen_basic_coords(self, point: (float, float)):
         if self.buildings.build_mode and self.buildings.chosen is not None:
             x, y = point
+            scale = self.buildings.chosen.sprite.scale
             self.buildings.chosen.x_coord = x
-            self.buildings.chosen.y_coord = y
+            self.buildings.chosen.y_coord = y - self.tile_size/2*(1-(0.78-scale))
 
     def draw_chosen_building(self):
         if self.buildings.chosen is not None:
@@ -33,4 +36,4 @@ class BuildingsGui:
     def update_coords(self, x_offset: float, y_offset: float):
         for building in self.buildings.on_map:
             building.sprite.center_x = building.x_coord + x_offset
-            building.sprite.center_y = building.y_coord + y_offset
+            building.sprite.bottom = building.y_coord + y_offset

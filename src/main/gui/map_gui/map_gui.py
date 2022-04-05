@@ -4,9 +4,9 @@ from ...map.map import Map
 
 class MapGui:
 
-    def __init__(self, game_map: Map):
+    def __init__(self, game_map: Map, tile_size: int = 64):
         self.map_ = game_map
-        self.tile_size = 64
+        self.tile_size = tile_size
         self.mouse_at_field = (0, 0)
         self.x_offset = 0
         self.y_offset = 0
