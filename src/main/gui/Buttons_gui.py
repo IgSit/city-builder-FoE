@@ -13,7 +13,9 @@ class ButtonsGui:
         button = Button(title, x_es, y_es, action)
         self.button_list.append(button)
 
-    def _draw_button(self, x_es: (int, int), y_es: (int, int), pressed: bool, text: str = ""):
+
+    @staticmethod
+    def _draw_button(x_es: (int, int), y_es: (int, int), pressed: bool, text: str = ""):
         x1, x2 = x_es
         y1, y2 = y_es
         color = arcade.csscolor.GOLD

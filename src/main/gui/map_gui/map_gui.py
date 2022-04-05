@@ -1,5 +1,4 @@
 import arcade.window_commands
-
 from ...map.map import Map
 
 
@@ -8,18 +7,20 @@ class MapGui:
     def __init__(self, game_map: Map):
         self.map_ = game_map
         self.tile_size = 64
+        self.mouse_at_field = (0, 0)
+        self.x_offset = 0
+        self.y_offset = 0
         self.screen_width, self.screen_height = arcade.window_commands.get_display_size()
         self.isometric_map = self._create_map()
         self.middle_points = self._create_middle_points()
-        self.mouse_at_field = (0, 0)
 
     def draw_map(self):
         for x in range(self.map_.length):
             for y in range(self.map_.width):
                 polygon = self.isometric_map[x][y]
-                polygon = [(x + self.screen_width // 2, y + self.screen_height // 16) for x, y in polygon]
+                polygon = [(x + self.x_offset + self.screen_width // 2,
+                            y + self.y_offset + self.screen_height // 16) for x, y in polygon]
                 arcade.draw_polygon_outline(polygon, arcade.csscolor.GOLD)
-        # arcade.finish_render()
 
     def _create_map(self):
         return [[self._create_grid(x, y) for x in range(self.map_.length)] for y in range(self.map_.width)]
@@ -33,7 +34,6 @@ class MapGui:
             (length + self.tile_size, height + self.tile_size),
             (length, height + self.tile_size)
         )
-
         return [self._cartesian_to_isometric(x, y) for x, y in rectangle]
 
     def _create_middle_points(self):
@@ -49,11 +49,13 @@ class MapGui:
     def mark_field(self, point: (int, int), color: arcade.csscolor):
         x, y = point
         polygon = self.isometric_map[x][y]
-        polygon = [(x + self.screen_width // 2, y + self.screen_height // 16) for x, y in polygon]
+        polygon = [(x + self.x_offset + self.screen_width // 2, y + self.y_offset + self.screen_height // 16) for x, y in polygon]
         arcade.draw_polygon_filled(polygon, color)
 
     def find_field_under_mouse(self):
         x, y = self.mouse_at_field
+        x -= self.x_offset
+        y -= self.y_offset
         closest_mid_pnt_ind = (0, 0)
         for i in range(self.map_.length):
             for j in range(self.map_.width):
@@ -78,5 +80,5 @@ class MapGui:
         return None
 
     @staticmethod
-    def _cartesian_to_isometric(x: float, y: float):
-        return [x - y, (x + y) / 3]
+    def _cartesian_to_isometric(x: int, y: int):
+        return [x - y, (x + y) / 2]
