@@ -4,6 +4,6 @@
 # - / głębokość
 
 class Dimensions:
-    def __init__(self, width: int, depth: int):
+    def __init__(self, width: int, length: int):
         self.width = width
-        self.depth = depth
+        self.length = length

@@ -1,29 +1,54 @@
 from src.main.buildings.AbstractBuilding import AbstractBuilding
-from src.main.buildings.Buildings import Buildings
+from src.main.gui.util_classes.Point import Point
 
 
 class Map:
 
-    def __init__(self, n: int, buildings: Buildings):
-        self.free = [[True for _ in range(n)] for _ in range(n)]
-        self.buildings = buildings
-        self.length = n
-        self.width = n
-        self.chosen_field = None
+    def __init__(self, n: int):
+        """
+        Back-end map holding info which field is free (self.free 2d array) and holding list of buildings that are
+        already placed on map (self.buildings).
 
-    def set_chosen_field(self, point: (int, int)):
-        self.chosen_field = point
+        :param n: int - length of map (it is a square)
+        """
+        self.free: [[bool]] = [[True for _ in range(n)] for _ in range(n)]
+        self.buildings: [AbstractBuilding] = []
+        self.length: int = n
+        self.width: int = n
 
-    def is_free(self, point: (int, int)):
-        return self.free[point[0]][point[1]]
+    def possible_to_place(self, lower_right: Point, building: AbstractBuilding) -> bool:
+        """
+        Checks whether given building can be placed on map.
 
-    def place_chosen_building(self):
-        if self.chosen_field is not None and self.buildings.chosen is not None:
-            x, y = self.chosen_field
-            if self.free[x][y]:
-                self.buildings.chosen.placed = True
+        :param lower_right: Point - bottom right corner of building desired position,
+        :param building: AbstractBuilding - building to be placed.
+        :return: bool
+        """
+        if int(lower_right.x) + building.dimensions.width - 1 > self.width - 1:
+            return False
+        if int(lower_right.y) + building.dimensions.length - 1 > self.length - 1:
+            return False
+
+        for x in range(int(lower_right.x), int(lower_right.x) + building.dimensions.width):
+            for y in range(int(lower_right.y), int(lower_right.y) + building.dimensions.length):
+                if not self.free[x][y]:
+                    return False
+
+        return True
+
+    def place_building(self, lower_right: Point, building: AbstractBuilding) -> None:
+        """
+        Places building on map. **Important! Requires manual check of possible_to_place before!**
+
+        :param lower_right: Point - bottom right corner of building desired position,
+        :param building: AbstractBuilding - building to be placed.
+        :return: void
+        """
+
+        for x in range(int(lower_right.x), int(lower_right.x) + building.dimensions.width):
+            for y in range(int(lower_right.y), int(lower_right.y) + building.dimensions.length):
                 self.free[x][y] = False
-                self.buildings.on_map.append(self.buildings.chosen)
-                self.buildings.chosen = None
+
+        self.buildings.append(building)
 
 
