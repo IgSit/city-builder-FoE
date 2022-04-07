@@ -55,7 +55,8 @@ class BuilderGui:
             self.chosen_building.map_position = (i, j)
             self._append_building_to_lists()
             a, b = self.map_gui.get_middle_point(i, j)
-            self.chosen_building.screen_coordinates = Point(a - 5, b - 23)
+            scale = self.chosen_building.sprite.scale
+            self.chosen_building.screen_coordinates = Point(a, b - self.tile_size / 2 * (1 - (0.78 - scale)))
             self.chosen_building = None
 
     def _append_building_to_lists(self):
