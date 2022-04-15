@@ -51,8 +51,8 @@ class BuilderGui:
             self.chosen_building = self.building_manager.get_copy()
 
     def _place_building(self, i: int, j: int):
-        if self.engine.place_building_on_map(Point(i, j), self.chosen_building):
-            self.chosen_building.map_position = (i, j)
+        if self.engine.place_building_on_map(Point(i, j), self.chosen_building.building):
+            self.chosen_building.building.map_position = (i, j)
             self._append_building_to_lists()
             a, b = self.map_gui.get_middle_point(i, j)
             scale = self.chosen_building.sprite.scale

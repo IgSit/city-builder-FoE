@@ -1,8 +1,8 @@
 import arcade
 from math import inf
 
-from src.main.buildings.AbstractBuilding import AbstractBuilding
 from src.main.engine.engine import Engine
+from src.main.gui.building_gui.BuildingGui import BuildingGui
 from src.main.gui.util_classes.Point import Point
 
 
@@ -17,7 +17,7 @@ class MapGui:
         self.engine = engine
         self.length, self.width = engine.get_map_dimensions()
         self.tile_size = tile_size
-        self.map_buildings: [AbstractBuilding] = []
+        self.map_buildings: [BuildingGui] = []
         self.map_building_sprite_list: arcade.SpriteList = arcade.SpriteList()
         self.offset = Point(0, 0)
         self.mouse_position = Point(0, 0)

@@ -1,7 +1,9 @@
-from src.main.buildings.AbstractBuilding import AbstractBuilding
+from copy import deepcopy
+
 from src.main.buildings.ResidentialBuilding import ResidentialBuilding
 from src.main.buildings.util_classes.Cost import Cost
 from src.main.buildings.util_classes.Dimensions import Dimensions
+from src.main.gui.building_gui.BuildingGui import BuildingGui
 
 
 class BuildingsManager:
@@ -10,11 +12,9 @@ class BuildingsManager:
     """
 
     def __init__(self):
-        residential = ResidentialBuilding("residential", "../main/buildings/assets/temp4.png",
-                                          Dimensions(1, 1), Cost(0, 0, 0), 5)
-        self.buildings: [AbstractBuilding] = [residential]
+        residential = BuildingGui(ResidentialBuilding("residential", Dimensions(1, 1), Cost(0, 0, 0), 5),
+                                  "../main/buildings/assets/temp4.png")
+        self.buildings: [BuildingGui] = [residential]
 
-    @staticmethod
-    def get_copy():
-        return ResidentialBuilding("residential", "../main/buildings/assets/temp4.png",
-                                   Dimensions(1, 1), Cost(0, 0, 0), 5)
+    def get_copy(self):
+        return deepcopy(self.buildings[0])
