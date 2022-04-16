@@ -5,18 +5,25 @@ from src.main.buildings.BuildingsManager import BuildingsManager
 from src.main.gui.util_classes.Button import Button
 from src.main.gui.util_classes.Point import Point
 
+PANEL_WIDTH = 320
+PANEL_HEIGHT = 600
+SCREEN_WIDTH = 0
+SCREEN_HEIGHT = 0
+
 
 class BuildingListSection(arcade.View):
 
     def __init__(self, builder_gui, buildings_manager: BuildingsManager):
+        global SCREEN_WIDTH, SCREEN_HEIGHT
+
         super().__init__()
-        self.width = 320
-        self.height = 600
+        SCREEN_WIDTH = self.window.width
+        SCREEN_HEIGHT = self.window.height
         self.builder_gui = builder_gui
         self.buildings_manager = buildings_manager
         self.panel = Panel(builder_gui, buildings_manager,
-                           left=(self.window.width - self.width), bottom=(1 / 8 * self.window.height),
-                           width=(self.width - 10), height=self.height,
+                           left=(self.window.width - PANEL_WIDTH), bottom=(1 / 8 * self.window.height),
+                           width=(PANEL_WIDTH - 10), height=PANEL_HEIGHT,
                            prevent_dispatch={True}, prevent_dispatch_view={True})
 
         self.section_manager.add_section(self.panel)
@@ -58,12 +65,15 @@ class Card:
     def __init__(self, builder_gui, buildings_manager, i: int):
         self.builder_gui = builder_gui
         self.buildings_manager = buildings_manager
+
         lower_left = self._calc_position(i)
         upper_right = lower_left.add(Point(140, 30))
+
         self.building_gui = self.buildings_manager.get_copy(i)
         self.button = Button(self.building_gui.building.name, lower_left, upper_right,
                              click_function=self.choose_building, idx=i)
         self.sprite = self.building_gui.sprite
+
         self.sprite.left = lower_left.x + 35
         self.sprite.bottom = upper_right.y + 15
 
@@ -77,5 +87,5 @@ class Card:
     @staticmethod
     def _calc_position(i: int):
         if i == 0:
-            return Point(1045, 500)
+            return Point(SCREEN_WIDTH - PANEL_WIDTH, SCREEN_HEIGHT - 1 / 2 * PANEL_HEIGHT)
         return Point(0, 0)
