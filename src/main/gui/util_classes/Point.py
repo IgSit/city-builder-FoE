@@ -54,18 +54,16 @@ class Point:
         :param other: Point
         :return: Point
         """
-        self.x += other.x
-        self.y += other.y
+        return Point(self.x + other.x, self.y + other.y)
 
     def subtract(self, other):
         """
-        Subtracts other point to point.
+        Subtracts other point from point.
 
         :param other: Point
         :return: Point
         """
-        self.x -= other.x
-        self.y -= other.y
+        return Point(self.x - other.x, self.y - other.y)
 
     def opposite(self):
         """

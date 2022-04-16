@@ -16,5 +16,5 @@ class BuildingsManager:
                                   "../main/buildings/assets/temp4.png")
         self.buildings: [BuildingGui] = [residential]
 
-    def get_copy(self):
-        return deepcopy(self.buildings[0])
+    def get_copy(self, i: int):
+        return deepcopy(self.buildings[i])
