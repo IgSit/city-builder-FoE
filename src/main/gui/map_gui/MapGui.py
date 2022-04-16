@@ -30,7 +30,7 @@ class MapGui:
 
     def on_mouse_drag(self, x: float, y: float, dx: float, dy: float):
         self.mouse_position = Point(x, y)
-        self.offset.add(Point(dx, dy))
+        self.offset = self.offset.add(Point(dx, dy))
         self.offset.set_x(min(max(self.offset.x, -500), 500))
         self.offset.set_y(min(max(self.offset.y, -250), 350))
 

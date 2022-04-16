@@ -1,22 +1,29 @@
+import arcade
+
+from typing import Optional
+
 from src.main.engine.engine import Engine
+from src.main.gui.builder_gui.BuildingsListSection import BuildingListSection
+from src.main.gui.building_gui.BuildingGui import BuildingGui
 from src.main.gui.map_gui.MapGui import MapGui
 from src.main.buildings.BuildingsManager import BuildingsManager
-from src.main.gui.util_classes.Button import Button
 from src.main.gui.util_classes.Point import Point
 
 
 class BuilderGui:
     def __init__(self, map_gui: MapGui, engine: Engine, tile_size: int = 64):
-        self.map_gui = map_gui
-        self.engine = engine
-        self.tile_size = tile_size
-        self.building_manager = BuildingsManager()
-        self.buttons = [Button("Build", Point(0, 0), Point(100, 100), click_function=self.choose_building)]
-        self.chosen_building = None
+        self.map_gui: MapGui = map_gui
+        self.engine: Engine = engine
+        self.chosen_building: Optional[BuildingGui] = None
+        self.builder_mode: bool = False
+        self.tile_size: int = tile_size
+        self.screen_width, self.screen_height = arcade.window_commands.get_display_size()
+        self.building_manager: BuildingsManager = BuildingsManager()
+        self.building_list_section = BuildingListSection(self, self.building_manager)
 
     def on_draw(self):
-        for button in self.buttons:
-            button.draw_button()
+        if self.builder_mode:
+            self.building_list_section.on_draw()
         if self.chosen_building is not None:
             self.chosen_building.sprite.draw()
 
@@ -32,23 +39,13 @@ class BuilderGui:
             self.chosen_building.sprite.center_x = x
             self.chosen_building.sprite.bottom = y - self.tile_size / 2 * (1 - (0.78 - scale))
 
-    def on_mouse_press(self, x: float, y: float):
-        for button in self.buttons:
-            if button.is_clicked(Point(x, y)):
-                button.click_function()
-
+    def on_mouse_press(self):
         if self.chosen_building is not None:
             coords = self.map_gui.find_field_under_cursor()
             if coords is None:
                 return
             i, j = coords
             self._place_building(i, j)
-
-    def choose_building(self):
-        if self.chosen_building is not None:
-            self.chosen_building = None
-        else:
-            self.chosen_building = self.building_manager.get_copy()
 
     def _place_building(self, i: int, j: int):
         if self.engine.place_building_on_map(Point(i, j), self.chosen_building.building):
