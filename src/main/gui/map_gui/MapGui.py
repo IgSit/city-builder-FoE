@@ -24,6 +24,7 @@ class MapGui:
         self.screen_width, self.screen_height = arcade.window_commands.get_display_size()
         self.isometric_map = self._create_map()
         self.middle_points = self._create_middle_points()
+        self.field_priority = self._create_field_priority()
 
     def on_mouse_motion(self, x: float, y: float):
         self.mouse_position = Point(x, y)
@@ -105,6 +106,22 @@ class MapGui:
         return [[(d[0] + abs(d[0] - b[0]) / 2 + self.screen_width//2,
                   a[1] + abs(c[1] - a[1]) / 2 + self.screen_height//16) for a, b, c, d in row]
                 for row in self.isometric_map]
+
+    def _create_field_priority(self):
+        n = max(self.width, self.length)
+        m = 2*n-1-abs(self.width - self.length)
+        priority_map = [[0]*self.length for _ in range(self.width)]
+        x = 0
+        y = min(self.width, self.length)-1
+        fields = {(x+i+j, y-i+j): (i, j) for i in range(self.width) for j in range(self.length)}
+        k = self.width * self.length - 1
+        for i in range(m):
+            for j in range(m):
+                if (i, j) in fields.keys():
+                    a, b = fields[(i, j)]
+                    priority_map[a][b] = k
+                    k -= 1
+        return priority_map
 
     def _dist(self, x: float, y: float, i: int, j: int):
         a, b = self.middle_points[i][j]

@@ -86,6 +86,4 @@ class Card:
 
     @staticmethod
     def _calc_position(i: int):
-        if i == 0:
-            return Point(SCREEN_WIDTH - PANEL_WIDTH, SCREEN_HEIGHT - 1 / 2 * PANEL_HEIGHT)
-        return Point(0, 0)
+        return Point(SCREEN_WIDTH - PANEL_WIDTH + (i % 2)*150, SCREEN_HEIGHT - (i // 2) / 3 * PANEL_HEIGHT - SCREEN_HEIGHT/2.5)

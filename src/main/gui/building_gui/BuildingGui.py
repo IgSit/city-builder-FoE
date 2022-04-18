@@ -13,15 +13,7 @@ class BuildingGui:
         self.screen_coordinates: Point = Point(0, 0)
         self.sprite: arcade.Sprite = arcade.Sprite(asset_path, scale=0.6)
 
-    def is_after(self, other):
-        """
-        Checks whether building is after the other building according to map position.
-        (Building is after when x index is bigger or x indexes are equal and y index is bigger.)
-
-        :param other: BuildingGui
-        :return: bool
-        """
-
-        return self.building.map_position[0] > other.building.map_position[0] or \
-               (self.building.map_position[0] == other.building.map_position[0] and
-                self.building.map_position[1] > other.building.map_position[1])
+    def lower_left(self):
+        x = self.building.map_position[0] + self.building.dimensions.width - 1
+        y = self.building.map_position[1]
+        return x, y
