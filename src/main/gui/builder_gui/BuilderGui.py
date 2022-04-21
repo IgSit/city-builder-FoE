@@ -26,6 +26,7 @@ class BuilderGui:
         if self.builder_mode:
             self.building_list_section.on_draw()
         if self.chosen_building is not None:
+            self._colour_building_tiles()
             self.chosen_building.sprite.draw()
 
     def on_mouse_motion(self, x: float, y: float):
@@ -47,6 +48,19 @@ class BuilderGui:
                 return
             i, j = coords
             self._place_building(i, j)
+
+    def _colour_building_tiles(self):
+        cords = self.map_gui.find_field_under_cursor()
+        if cords is None:
+            return
+
+        x, y = cords
+        free = self.engine.map.possible_to_place(Point(x, y), self.chosen_building.building)
+
+        for w in range(x, min(x + self.chosen_building.building.dimensions.width, self.map_gui.length)):
+            for k in range(y, min(y + self.chosen_building.building.dimensions.length, self.map_gui.width)):
+                color = arcade.csscolor.SKY_BLUE if free else arcade.csscolor.RED
+                self.map_gui.mark_field(w, k, color)
 
     def _place_building(self, i: int, j: int):
         if self.engine.place_building_on_map(Point(i, j), self.chosen_building.building):

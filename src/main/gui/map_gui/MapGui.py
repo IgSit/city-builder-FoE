@@ -67,12 +67,34 @@ class MapGui:
                 min_dist = (self._dist(x, y, closest_mid_pnt_ind[0], closest_mid_pnt_ind[1]))
         if min_dist < 50:
             x, y = closest_mid_pnt_ind
-            if self.is_tile_free(x, y):
-                self._mark_field(x, y, arcade.csscolor.SKY_BLUE)
-            else:
-                self._mark_field(x, y, arcade.csscolor.RED)
+            self.color_tile(x, y)
             return closest_mid_pnt_ind
         return None
+
+    def color_tile(self, x: int, y: int):
+        """Colors given tile of a map.
+
+        :param: x: int - row index
+        :param: y: int - column index
+        :return: void
+        """
+        if self.is_tile_free(x, y):
+            self.mark_field(x, y, arcade.csscolor.SKY_BLUE)
+        else:
+            self.mark_field(x, y, arcade.csscolor.RED)
+
+    def mark_field(self, x: int, y: int, color: arcade.csscolor):
+        """
+        Colours given matrix tile in given color
+        :param x: int
+        :param y: int
+        :param color: arcade,csscolor
+        :return:
+        """
+        polygon = self.isometric_map[x][y]
+        polygon = [(x + self.offset.x + self.screen_width // 2, y + self.offset.y + self.screen_height // 16)
+                   for x, y in polygon]
+        arcade.draw_polygon_filled(polygon, color)
 
     def get_middle_point(self, i: int, j: int):
         return self.middle_points[i][j]
@@ -129,19 +151,6 @@ class MapGui:
 
     def is_tile_free(self, x: int, y: int):
         return self.engine.is_tile_free(x, y)
-
-    def _mark_field(self, x: int, y: int, color: arcade.csscolor):
-        """
-        Colours given matrix tile in given color
-        :param x: int
-        :param: y: int
-        :param color: arcade,csscolor
-        :return:
-        """
-        polygon = self.isometric_map[x][y]
-        polygon = [(x + self.offset.x + self.screen_width // 2, y + self.offset.y + self.screen_height // 16)
-                   for x, y in polygon]
-        arcade.draw_polygon_filled(polygon, color)
 
     @staticmethod
     def _cartesian_to_isometric(x: int, y: int):
