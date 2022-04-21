@@ -26,7 +26,7 @@ class BuildingsManager:
                             "../main/buildings/assets/tower.png")
         town_hall = BuildingGui(DefenceBuilding("town hall", Dimensions(2, 2), Cost(0, 0, 0), 0, 0, 0),
                                 "../main/buildings/assets/townhall.png")
-        self.buildings: [BuildingGui] = [tower, town_hall, smith, tree, shed, residential]
+        self.buildings: [BuildingGui] = [tower, town_hall, smith, tree, shed, residential, residential, residential, residential]
 
     def get_copy(self, i: int):
         return deepcopy(self.buildings[i])

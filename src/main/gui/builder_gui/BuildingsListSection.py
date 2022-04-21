@@ -41,16 +41,45 @@ class Panel(arcade.Section):
         self.builder_gui = builder_gui
         self.buildings_manager = buildings_manager
         self.cards = self._create_cards()
+        self.start_Ind = 0
+        self.end_Ind = 6
+        self.right_button = Button(">", lower_left=Point(left + 55, bottom - 30), upper_right=Point(left + 105, bottom),
+                                   click_function=self.right_shift)
+        self.left_button = Button("<", lower_left=Point(left, bottom - 30), upper_right=Point(left + 50, bottom),
+                                  click_function=self.left_shift)
 
     def on_draw(self):
         arcade.draw_lrtb_rectangle_filled(self.left, self.right, self.top,
                                           self.bottom, arcade.color_from_hex_string('#0D0D0D'))
         arcade.draw_lrtb_rectangle_outline(self.left, self.right, self.top,
                                            self.bottom, arcade.color_from_hex_string('#D9BBA0'))
-
-        for card in self.cards:
+        self.right_button.draw_button()
+        self.left_button.draw_button()
+        for card in self.cards[self.start_Ind:self.end_Ind]:
             card.button.draw_button()
             card.sprite.draw()
+
+    def right_shift(self):
+        if self.end_Ind < len(self.cards):
+            self._hide_buttons()
+            self.start_Ind = self.end_Ind
+            self.end_Ind = min(self.end_Ind + 6, len(self.cards))
+            self._show_buttons()
+
+    def left_shift(self):
+        if self.start_Ind > 0:
+            self._hide_buttons()
+            self.end_Ind = self.start_Ind
+            self.start_Ind -= 6
+            self._show_buttons()
+
+    def _hide_buttons(self):
+        for i in range(self.start_Ind, self.end_Ind):
+            self.cards[i].button.hide_button()
+
+    def _show_buttons(self):
+        for i in range(self.start_Ind, self.end_Ind):
+            self.cards[i].button.show_button()
 
     def _create_cards(self):
         cards = []
@@ -86,4 +115,5 @@ class Card:
 
     @staticmethod
     def _calc_position(i: int):
-        return Point(SCREEN_WIDTH - PANEL_WIDTH + (i % 2)*150, SCREEN_HEIGHT - (i // 2) / 3 * PANEL_HEIGHT - SCREEN_HEIGHT/2.5)
+        return Point(SCREEN_WIDTH - PANEL_WIDTH + (i % 2) * 150,
+                     SCREEN_HEIGHT - ((i % 6) // 2) / 3 * PANEL_HEIGHT - SCREEN_HEIGHT / 2.5)
