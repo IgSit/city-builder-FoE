@@ -8,8 +8,8 @@ from src.main.gui.util_classes.Point import Point
 
 class MapGui:
     """
-    Part of gui containing visual representation of map and its buildings, handling dragging map,
-    placing and moving buildings and clicking on them. This class **does not** have access to map itself -
+    Part of gui containing visual representation of map and its buildings, handling dragging map.
+    This class **does not** have access to map itself -
     all operations are done via engine.
     """
 
@@ -18,7 +18,6 @@ class MapGui:
         self.length, self.width = engine.get_map_dimensions()
         self.tile_size = tile_size
         self.map_buildings: [BuildingGui] = []
-        self.map_building_sprite_list: arcade.SpriteList = arcade.SpriteList()
         self.offset = Point(0, 0)
         self.mouse_position = Point(0, 0)
         self.screen_width, self.screen_height = arcade.window_commands.get_display_size()
@@ -99,6 +98,11 @@ class MapGui:
     def get_middle_point(self, i: int, j: int):
         return self.middle_points[i][j]
 
+    def remove_building_sprite(self, sprite: arcade.sprite):
+        for building in self.map_buildings:
+            if building.sprite == sprite:
+                self.map_buildings.remove(building)
+
     def _create_map(self):
         """
         Creates iso map containing tiles of a map.
@@ -132,7 +136,7 @@ class MapGui:
     def _create_field_priority(self):
         n = max(self.width, self.length)
         m = 2*n-1-abs(self.width - self.length)
-        priority_map = [[0]*self.length for _ in range(self.width)]
+        priority_map = [[0 for _ in range(self.length)] for _ in range(self.width)]
         x = 0
         y = min(self.width, self.length)-1
         fields = {(x+i+j, y-i+j): (i, j) for i in range(self.width) for j in range(self.length)}

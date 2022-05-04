@@ -2,6 +2,7 @@ import arcade
 import math as mt
 from typing import Optional
 
+from src.main.buildings.AbstractBuilding import AbstractBuilding
 from src.main.buildings.util_classes.Dimensions import Dimensions
 from src.main.engine.engine import Engine
 from src.main.gui.builder_gui.BuildingsListSection import BuildingListSection
@@ -16,14 +17,14 @@ class BuilderGui:
         self.map_gui: MapGui = map_gui
         self.engine: Engine = engine
         self.chosen_building: Optional[BuildingGui] = None
-        self.builder_mode: bool = False
+        self.mode: Optional[str] = None
         self.tile_size: int = tile_size
         self.screen_width, self.screen_height = arcade.window_commands.get_display_size()
         self.building_manager: BuildingsManager = BuildingsManager()
         self.building_list_section = BuildingListSection(self, self.building_manager)
 
     def on_draw(self):
-        if self.builder_mode:
+        if self.mode == "BUILD":
             self.building_list_section.on_draw()
         if self.chosen_building is not None:
             self._colour_building_tiles()
@@ -41,13 +42,14 @@ class BuilderGui:
             self.chosen_building.sprite.center_x = x
             self.chosen_building.sprite.bottom = y - self.tile_size / 2 * scale / 0.78
 
-    def on_mouse_press(self):
+    def on_mouse_press(self, x: float, y: float):
         if self.chosen_building is not None:
-            coords = self.map_gui.find_field_under_cursor()
-            if coords is None:
-                return
-            i, j = coords
-            self._place_building(i, j)
+            self._place_building()
+        elif self.mode == "MOVE":
+            building: AbstractBuilding = self._remove_building(x, y)
+            self.chosen_building = self.building_manager.get_copy_from_building(building)
+        elif self.mode == "SELL":
+            self._remove_building(x, y)
 
     def _colour_building_tiles(self):
         cords = self.map_gui.find_field_under_cursor()
@@ -62,10 +64,15 @@ class BuilderGui:
                 color = arcade.csscolor.SKY_BLUE if free else arcade.csscolor.RED
                 self.map_gui.mark_field(w, k, color)
 
-    def _place_building(self, i: int, j: int):
+    def _place_building(self):
+        coords = self.map_gui.find_field_under_cursor()
+        if coords is None:
+            return
+        i, j = coords
+
         if self.engine.place_building_on_map(Point(i, j), self.chosen_building.building):
             self.chosen_building.building.map_position = (i, j)
-            self._append_building_to_lists()
+            self.map_gui.map_buildings.append(self.chosen_building)
             self.map_gui.map_buildings.sort(key=self._lower_left_priority)
             a, b = self.map_gui.get_middle_point(i, j)
             scale = self.chosen_building.sprite.scale
@@ -74,16 +81,26 @@ class BuilderGui:
                                                             b - self.tile_size/2*scale/0.78)
             self.chosen_building = None
 
-    def _append_building_to_lists(self):
-        """
-        Inserts a building in sorted array of buildings **(inserts both to map_gui.map_buildings and
-        map_gui.map_buildings_sprite_list)**.
+    def _remove_building(self, x: float, y: float):
+        coords = self.map_gui.find_field_under_cursor()
+        if coords is None:
+            return
+        i, j = coords
 
-        :return: void
-        """
+        building: AbstractBuilding = self.engine.find_building_at_field(i, j)
+        if building is None:
+            return
 
-        self.map_gui.map_buildings.append(self.chosen_building)
-        self.map_gui.map_building_sprite_list.append(self.chosen_building.sprite)
+        self.engine.remove_building(building)
+
+        building_list = arcade.SpriteList()
+        for building_gui in self.map_gui.map_buildings:
+            building_list.append(building_gui.sprite)
+
+        hit_buildings = arcade.get_sprites_at_point((x, y), building_list)
+        self.map_gui.remove_building_sprite(hit_buildings[0])
+
+        return building
 
     def _lower_left_priority(self, building_gui: BuildingGui):
         x, y = building_gui.lower_left()

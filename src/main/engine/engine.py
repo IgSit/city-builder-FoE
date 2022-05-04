@@ -27,6 +27,13 @@ class Engine:
             return True
         return False
 
+    def find_building_at_field(self, x: float, y: float):
+        x, y = int(x), int(y)
+        return self.map.find_building_at_field(x, y)
+
+    def remove_building(self, building: AbstractBuilding):
+        self.map.remove_building(building)
+
     def get_map_dimensions(self):
         """
         Returns **(int, int)** instead of Point object because of representing something logically different

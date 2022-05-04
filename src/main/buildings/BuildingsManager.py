@@ -1,5 +1,6 @@
 from copy import deepcopy
 
+from src.main.buildings.AbstractBuilding import AbstractBuilding
 from src.main.buildings.DefenceBuilding import DefenceBuilding
 from src.main.buildings.ProductionBuilding import ProductionBuilding
 from src.main.buildings.ResidentialBuilding import ResidentialBuilding
@@ -30,3 +31,10 @@ class BuildingsManager:
 
     def get_copy(self, i: int):
         return deepcopy(self.buildings[i])
+
+    def get_copy_from_building(self, building: AbstractBuilding):
+        if building is None:
+            return
+        for i in range(len(self.buildings)):
+            if self.buildings[i].building.name == building.name:
+                return self.get_copy(i)

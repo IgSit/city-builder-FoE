@@ -51,4 +51,16 @@ class Map:
 
         self.buildings.append(building)
 
+    def remove_building(self, building: AbstractBuilding):
+        self.buildings.remove(building)
+        for x in range(building.map_position[0], building.map_position[0] + building.dimensions.width):
+            for y in range(building.map_position[1], building.map_position[1] + building.dimensions.length):
+                self.free[x][y] = True
 
+    def find_building_at_field(self, x: int, y: int):
+        if self.free[x][y]:
+            return None
+        for building in self.buildings:
+            if building.map_position[0] <= x < building.map_position[0] + building.dimensions.width \
+                    and building.map_position[1] <= y < building.map_position[1] + building.dimensions.length:
+                return building

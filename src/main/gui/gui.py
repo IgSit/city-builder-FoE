@@ -13,7 +13,7 @@ class Gui(arcade.Window):
         self.engine = engine
         self.map_gui = MapGui(engine)
         self.builder_gui = BuilderGui(self.map_gui, engine)
-        self.controls_gui = ControlsGui(self.builder_gui)
+        self.controls_gui = ControlsGui(self.builder_gui, self.map_gui)
 
     def run(self):
         arcade.run()
@@ -26,7 +26,7 @@ class Gui(arcade.Window):
 
     def on_mouse_press(self, x: float, y: float, button: int, modifiers: int):
         if button == 1:  # left
-            self.builder_gui.on_mouse_press()
+            self.builder_gui.on_mouse_press(x, y)
 
     def on_mouse_drag(self, x: float, y: float, dx: float, dy: float, buttons: int, modifiers: int):
         if buttons == 2:  # middle mouse button
