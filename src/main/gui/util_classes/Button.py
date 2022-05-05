@@ -19,12 +19,12 @@ class Button:
         self.enabled = True
 
         self.ui_flat_button = arcade.gui.UIFlatButton(text=title, width=(upper_right.x - lower_left.x),
-                                                 height=(upper_right.y - lower_left.y))
+                                                      height=(upper_right.y - lower_left.y))
         self.v_box.add(self.ui_flat_button.with_space_around(bottom=10, left=10))
         self.widget = arcade.gui.UIAnchorWidget(
-                anchor_x="left", anchor_y="bottom",
-                align_x=lower_left.x, align_y=lower_left.y,
-                child=self.v_box)
+            anchor_x="left", anchor_y="bottom",
+            align_x=lower_left.x, align_y=lower_left.y,
+            child=self.v_box)
         self.manager.add(self.widget)
 
         @self.ui_flat_button.event("on_click")
@@ -47,5 +47,3 @@ class Button:
         if not self.hidden:
             self.manager.remove(self.widget)
             self.hidden = True
-
-

@@ -16,17 +16,17 @@ class BuildingsManager:
     """
 
     def __init__(self):
-        residential = BuildingGui(ResidentialBuilding("residential", Dimensions(1, 1), Cost(0, 0, 0), 5),
+        residential = BuildingGui(ResidentialBuilding("residential", Dimensions(1, 1), Cost(200, 200, 0), 5),
                                   "../main/buildings/assets/temp4.png")
-        shed = BuildingGui(ProductionBuilding("shed", Dimensions(1, 2), Cost(0, 0, 0), "nothing", "wheat"),
+        shed = BuildingGui(ProductionBuilding("shed", Dimensions(1, 2), Cost(100, 50, 2), "nothing", "wheat"),
                            "../main/buildings/assets/shed.png")
-        smith = BuildingGui(ProductionBuilding("smith", Dimensions(2, 1), Cost(0, 0, 0), "iron ore", "tools"),
+        smith = BuildingGui(ProductionBuilding("smith", Dimensions(2, 1), Cost(400, 600, 5), "iron ore", "tools"),
                             "../main/buildings/assets/smith.png")
-        tree = BuildingGui(ProductionBuilding("tree", Dimensions(1, 1), Cost(0, 0, 0), "nothing", "wood"),
+        tree = BuildingGui(ProductionBuilding("tree", Dimensions(1, 1), Cost(0, 50, 1), "nothing", "wood"),
                            "../main/buildings/assets/tree.png")
-        tower = BuildingGui(DefenceBuilding("tower", Dimensions(1, 1), Cost(0, 0, 0), 0, 0, 0),
+        tower = BuildingGui(DefenceBuilding("tower", Dimensions(1, 1), Cost(700, 1000, 10), 0, 0, 0),
                             "../main/buildings/assets/tower.png")
-        road = BuildingGui(Road("road", Dimensions(1, 1), Cost(0, 0, 0)), "../main/buildings/assets/road.png")
+        road = BuildingGui(Road("road", Dimensions(1, 1), Cost(50, 50, 0)), "../main/buildings/assets/road.png")
         town_hall = BuildingGui(DefenceBuilding("town hall", Dimensions(2, 2), Cost(0, 0, 0), 0, 0, 0),
                                            "../main/buildings/assets/townhall.png")
 

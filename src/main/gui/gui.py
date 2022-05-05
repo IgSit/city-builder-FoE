@@ -12,10 +12,10 @@ class Gui(arcade.Window):
     def __init__(self, engine: Engine):
         super().__init__(100, 800, fullscreen=True)
         self.engine = engine
+        self.market_section = MarketSection()
         self.map_gui = MapGui(engine)
         self.builder_gui = BuilderGui(self.map_gui, engine)
-        self.market_section = MarketSection()
-        self.controls_gui = ControlsGui(self.builder_gui, self.map_gui, self.market_section)
+        self.controls_gui = ControlsGui(self.builder_gui, self.map_gui, self.market_section, engine)
 
     def run(self):
         arcade.run()

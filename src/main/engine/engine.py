@@ -1,6 +1,8 @@
+from src.main.buildings.util_classes.Cost import Cost
 from src.main.gui.util_classes.Point import Point
 from src.main.map.map import Map
 from src.main.buildings.AbstractBuilding import AbstractBuilding
+from src.main.resources.Resources import Resources
 
 
 class Engine:
@@ -12,6 +14,7 @@ class Engine:
 
     def __init__(self, map_size: int):
         self.map = Map(map_size)
+        self.resources = Resources()
 
     def possible_to_place(self, lower_left: Point, building: AbstractBuilding):
         """
@@ -22,17 +25,21 @@ class Engine:
         :return: bool
         """
 
-        return self.map.possible_to_place(lower_left, building)
+        return self.map.possible_to_place(lower_left, building) and self.resources.has_enough_resources(building)
 
-    def place_building(self, lower_left: Point, building: AbstractBuilding):
+    def place_building(self, lower_left: Point, building: AbstractBuilding, mode: str):
         self.map.place_building(lower_left, building)
+        if mode != "MOVE":
+            self.resources.on_building(building)
 
     def find_building_at_field(self, x: float, y: float):
         x, y = int(x), int(y)
         return self.map.find_building_at_field(x, y)
 
-    def remove_building(self, building: AbstractBuilding):
+    def remove_building(self, building: AbstractBuilding, mode: str):
         self.map.remove_building(building)
+        if mode != "MOVE":
+            self.resources.on_destroy(building)
 
     def connected_to_town_hall(self, lower_left: Point, building: AbstractBuilding):
         return self.map.connected_to_town_hall(lower_left, building)
@@ -56,3 +63,6 @@ class Engine:
         """
 
         return self.map.free[i][j]
+
+    def get_resources(self):
+        return Cost(self.resources.money, self.resources.supply, self.resources.people)

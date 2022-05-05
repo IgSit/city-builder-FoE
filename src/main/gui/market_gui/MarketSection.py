@@ -2,7 +2,7 @@ import arcade
 
 from src.main.gui.util_classes.Button import Button
 from src.main.gui.util_classes.Point import Point
-from src.main.trade_offers.TradeManager import TradeManager, Offer
+from src.main.trade_offers.TradeManager import TradeManager
 
 SCREEN_WIDTH = 0
 SCREEN_HEIGHT = 0

@@ -16,5 +16,9 @@ class AbstractBuilding(ABC):
         self.connected_to_town = False
 
     @staticmethod
+    def add_new_people():
+        return 0
+
+    @staticmethod
     def is_road():
         return False

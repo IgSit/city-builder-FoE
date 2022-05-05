@@ -3,8 +3,6 @@ import math as mt
 from typing import Optional
 
 from src.main.buildings.AbstractBuilding import AbstractBuilding
-from src.main.buildings.DefenceBuilding import DefenceBuilding
-from src.main.buildings.util_classes.Cost import Cost
 from src.main.buildings.util_classes.Dimensions import Dimensions
 from src.main.engine.engine import Engine
 from src.main.gui.builder_gui.BuildingsListSection import BuildingListSection
@@ -94,7 +92,7 @@ class BuilderGui:
             dimensions = self.chosen_building.building.dimensions
             self.chosen_building.screen_coordinates = Point(a + self._calc_ratio(dimensions) * self.tile_size,
                                                             b - self.tile_size / 2 * scale / 0.78)
-            self.engine.place_building(Point(i, j), self.chosen_building.building)
+            self.engine.place_building(Point(i, j), self.chosen_building.building, self.mode)
             self.chosen_building = None
 
     def _remove_building(self, x: float, y: float):
@@ -107,7 +105,7 @@ class BuilderGui:
         if building is None or (building.name == "town hall" and self.mode == "SELL"):
             return
 
-        self.engine.remove_building(building)
+        self.engine.remove_building(building, self.mode)
 
         building_list = arcade.SpriteList()
         for building_gui in self.map_gui.map_buildings:
