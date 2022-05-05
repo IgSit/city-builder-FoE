@@ -13,19 +13,19 @@ class Engine:
     def __init__(self, map_size: int):
         self.map = Map(map_size)
 
-    def place_building_on_map(self, lower_left: Point, building: AbstractBuilding):
+    def possible_to_place(self, lower_left: Point, building: AbstractBuilding):
         """
-        Given signal from gui, checks whether it's possible to place a building and then places it.
+        Given signal from gui, checks whether it's possible to place a building.
 
         :param lower_left: Point - bottom left corner of building
         :param building: AbstractBuilding - building to be placed
         :return: bool
         """
 
-        if self.map.possible_to_place(lower_left, building):
-            self.map.place_building(lower_left, building)
-            return True
-        return False
+        return self.map.possible_to_place(lower_left, building)
+
+    def place_building(self, lower_left: Point, building: AbstractBuilding):
+        self.map.place_building(lower_left, building)
 
     def find_building_at_field(self, x: float, y: float):
         x, y = int(x), int(y)
@@ -33,6 +33,9 @@ class Engine:
 
     def remove_building(self, building: AbstractBuilding):
         self.map.remove_building(building)
+
+    def connected_to_town_hall(self, lower_left: Point, building: AbstractBuilding):
+        return self.map.connected_to_town_hall(lower_left, building)
 
     def get_map_dimensions(self):
         """

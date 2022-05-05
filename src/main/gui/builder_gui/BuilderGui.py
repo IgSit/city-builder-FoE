@@ -3,6 +3,8 @@ import math as mt
 from typing import Optional
 
 from src.main.buildings.AbstractBuilding import AbstractBuilding
+from src.main.buildings.DefenceBuilding import DefenceBuilding
+from src.main.buildings.util_classes.Cost import Cost
 from src.main.buildings.util_classes.Dimensions import Dimensions
 from src.main.engine.engine import Engine
 from src.main.gui.builder_gui.BuildingsListSection import BuildingListSection
@@ -22,6 +24,7 @@ class BuilderGui:
         self.screen_width, self.screen_height = arcade.window_commands.get_display_size()
         self.building_manager: BuildingsManager = BuildingsManager()
         self.building_list_section = BuildingListSection(self, self.building_manager)
+        self._place_town()
 
     def on_draw(self):
         if self.mode == "BUILD":
@@ -50,6 +53,17 @@ class BuilderGui:
             self.chosen_building = self.building_manager.get_copy_from_building(building)
         elif self.mode == "SELL":
             self._remove_building(x, y)
+        else:
+            # kod tylko pokazujący, że działa, docelowo do usunięcia
+            cords = self.map_gui.find_field_under_cursor()
+            if cords is None:
+                return
+            x, y = cords
+            building = self.engine.find_building_at_field(x, y)
+            if building is None:
+                return
+            print("Connected to town hall", building.connected_to_town)
+            # aż dotąd
 
     def _colour_building_tiles(self):
         cords = self.map_gui.find_field_under_cursor()
@@ -64,21 +78,23 @@ class BuilderGui:
                 color = arcade.csscolor.SKY_BLUE if free else arcade.csscolor.RED
                 self.map_gui.mark_field(w, k, color)
 
-    def _place_building(self):
-        coords = self.map_gui.find_field_under_cursor()
-        if coords is None:
-            return
-        i, j = coords
+    def _place_building(self, i=None, j=None):
+        if i is None and j is None:
+            coords = self.map_gui.find_field_under_cursor()
+            if coords is None:
+                return
+            i, j = coords
 
-        if self.engine.place_building_on_map(Point(i, j), self.chosen_building.building):
+        if self.engine.possible_to_place(Point(i, j), self.chosen_building.building):
             self.chosen_building.building.map_position = (i, j)
             self.map_gui.map_buildings.append(self.chosen_building)
             self.map_gui.map_buildings.sort(key=self._lower_left_priority)
             a, b = self.map_gui.get_middle_point(i, j)
             scale = self.chosen_building.sprite.scale
             dimensions = self.chosen_building.building.dimensions
-            self.chosen_building.screen_coordinates = Point(a + self._calc_ratio(dimensions)*self.tile_size,
-                                                            b - self.tile_size/2*scale/0.78)
+            self.chosen_building.screen_coordinates = Point(a + self._calc_ratio(dimensions) * self.tile_size,
+                                                            b - self.tile_size / 2 * scale / 0.78)
+            self.engine.place_building(Point(i, j), self.chosen_building.building)
             self.chosen_building = None
 
     def _remove_building(self, x: float, y: float):
@@ -105,6 +121,11 @@ class BuilderGui:
     def _lower_left_priority(self, building_gui: BuildingGui):
         x, y = building_gui.lower_left()
         return self.map_gui.field_priority[x][y]
+
+    def _place_town(self):
+        self.chosen_building = BuildingGui(DefenceBuilding("town hall", Dimensions(2, 2), Cost(0, 0, 0), 0, 0, 0),
+                                           "../main/buildings/assets/townhall.png")
+        self._place_building(0, 0)
 
     @staticmethod
     def _calc_ratio(dimensions: Dimensions):

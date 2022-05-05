@@ -13,3 +13,8 @@ class AbstractBuilding(ABC):
         self.dimensions = dimensions
         self.cost = cost
         self.map_position = (-1, -1)
+        self.connected_to_town = False
+
+    @staticmethod
+    def is_road():
+        return False

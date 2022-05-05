@@ -4,6 +4,7 @@ from src.main.buildings.AbstractBuilding import AbstractBuilding
 from src.main.buildings.DefenceBuilding import DefenceBuilding
 from src.main.buildings.ProductionBuilding import ProductionBuilding
 from src.main.buildings.ResidentialBuilding import ResidentialBuilding
+from src.main.buildings.Road import Road
 from src.main.buildings.util_classes.Cost import Cost
 from src.main.buildings.util_classes.Dimensions import Dimensions
 from src.main.gui.building_gui.BuildingGui import BuildingGui
@@ -25,9 +26,9 @@ class BuildingsManager:
                            "../main/buildings/assets/tree.png")
         tower = BuildingGui(DefenceBuilding("tower", Dimensions(1, 1), Cost(0, 0, 0), 0, 0, 0),
                             "../main/buildings/assets/tower.png")
-        town_hall = BuildingGui(DefenceBuilding("town hall", Dimensions(2, 2), Cost(0, 0, 0), 0, 0, 0),
-                                "../main/buildings/assets/townhall.png")
-        self.buildings: [BuildingGui] = [tower, town_hall, smith, tree, shed, residential, residential, residential, residential]
+        road = BuildingGui(Road("road", Dimensions(1, 1), Cost(0, 0, 0)), "../main/buildings/assets/road.png")
+
+        self.buildings: [BuildingGui] = [tower, smith, tree, shed, residential, road]
 
     def get_copy(self, i: int):
         return deepcopy(self.buildings[i])
