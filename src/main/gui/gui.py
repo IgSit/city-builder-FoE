@@ -4,6 +4,7 @@ from src.main.engine.engine import Engine
 from src.main.gui.builder_gui.BuilderGui import BuilderGui
 from src.main.gui.controls_gui.ControlsGui import ControlsGui
 from src.main.gui.map_gui.MapGui import MapGui
+from src.main.gui.market_gui.MarketSection import MarketSection
 
 
 class Gui(arcade.Window):
@@ -13,7 +14,8 @@ class Gui(arcade.Window):
         self.engine = engine
         self.map_gui = MapGui(engine)
         self.builder_gui = BuilderGui(self.map_gui, engine)
-        self.controls_gui = ControlsGui(self.builder_gui, self.map_gui)
+        self.market_section = MarketSection()
+        self.controls_gui = ControlsGui(self.builder_gui, self.map_gui, self.market_section)
 
     def run(self):
         arcade.run()
@@ -23,6 +25,7 @@ class Gui(arcade.Window):
         self.map_gui.on_draw()
         self.builder_gui.on_draw()
         self.controls_gui.on_draw()
+        self.market_section.on_draw()
 
     def on_mouse_press(self, x: float, y: float, button: int, modifiers: int):
         if button == 1:  # left
