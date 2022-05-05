@@ -1,14 +1,16 @@
 from src.main.gui.builder_gui.BuilderGui import BuilderGui
 from src.main.gui.map_gui.MapGui import MapGui
+from src.main.gui.market_gui.MarketSection import MarketSection
 from src.main.gui.util_classes.Button import Button
 from src.main.gui.util_classes.Point import Point
 
 
 class ControlsGui:
 
-    def __init__(self, builder_gui: BuilderGui, map_gui: MapGui):
+    def __init__(self, builder_gui: BuilderGui, map_gui: MapGui, market_section: MarketSection):
         self.builder_gui: BuilderGui = builder_gui
         self.map_gui: MapGui = map_gui
+        self.market_section: MarketSection = market_section
         self.buttons: [Button] = self._init_buttons()
 
     def on_draw(self):
@@ -16,8 +18,9 @@ class ControlsGui:
             button.draw_button()
 
     def _init_buttons(self):
-        funcs = [self._toggle_build_mode, self._toggle_move_mode, self._toggle_sell_mode, self._toggle_tech_mode]
-        texts = ["Build", "Move", "Sell", "Tech"]
+        funcs = [self._toggle_build_mode, self._toggle_move_mode, self._toggle_sell_mode, self._toggle_tech_mode,
+                 self._toggle_market_mode]
+        texts = ["Build", "Move", "Sell", "Tech", "Market"]
         buttons: [Button] = []
         for i in range(len(funcs)):
             buttons.append(Button(texts[i], Point(100 * i, 0), Point(100 * (i + 1), 30), click_function=funcs[i]))
@@ -34,3 +37,6 @@ class ControlsGui:
 
     def _toggle_tech_mode(self):
         pass
+
+    def _toggle_market_mode(self):
+        self.market_section.change_mode()
