@@ -47,7 +47,7 @@ class MarketSection(arcade.View):
                 self.cards.append(OfferCard(self.trade_manager, i))
                 i += 1
             while i > n:
-                self.cards.pop()
+                self.cards.pop().disable_button()
                 i -= 1
             for i, offer in enumerate(self.trade_manager.active_offers):
                 self.cards[i].offer = offer
