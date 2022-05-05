@@ -16,14 +16,17 @@ class Engine:
         self.map = Map(map_size)
         self.resources = Resources()
 
-    def possible_to_place(self, lower_left: Point, building: AbstractBuilding):
+    def possible_to_place(self, lower_left: Point, building: AbstractBuilding, mode: str):
         """
         Given signal from gui, checks whether it's possible to place a building.
 
+        :param mode: BUILD or MOVE mode
         :param lower_left: Point - bottom left corner of building
         :param building: AbstractBuilding - building to be placed
         :return: bool
         """
+        if mode == "MOVE":
+            return self.map.possible_to_place(lower_left, building)
 
         return self.map.possible_to_place(lower_left, building) and self.resources.has_enough_resources(building)
 

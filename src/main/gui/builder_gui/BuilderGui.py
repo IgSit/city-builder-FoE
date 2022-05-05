@@ -69,7 +69,7 @@ class BuilderGui:
             return
 
         x, y = cords
-        free = self.engine.map.possible_to_place(Point(x, y), self.chosen_building.building)
+        free = self.engine.possible_to_place(Point(x, y), self.chosen_building.building, self.mode)
 
         for w in range(x, min(x + self.chosen_building.building.dimensions.width, self.map_gui.length)):
             for k in range(y, min(y + self.chosen_building.building.dimensions.length, self.map_gui.width)):
@@ -83,7 +83,7 @@ class BuilderGui:
                 return
             i, j = coords
 
-        if self.engine.possible_to_place(Point(i, j), self.chosen_building.building):
+        if self.engine.possible_to_place(Point(i, j), self.chosen_building.building, self.mode):
             self.chosen_building.building.map_position = (i, j)
             self.map_gui.map_buildings.append(self.chosen_building)
             self.map_gui.map_buildings.sort(key=self._lower_left_priority)
