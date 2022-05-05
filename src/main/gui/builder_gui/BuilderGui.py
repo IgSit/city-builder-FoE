@@ -104,7 +104,7 @@ class BuilderGui:
         i, j = coords
 
         building: AbstractBuilding = self.engine.find_building_at_field(i, j)
-        if building is None:
+        if building is None or (building.name == "town hall" and self.mode == "SELL"):
             return
 
         self.engine.remove_building(building)
@@ -123,8 +123,7 @@ class BuilderGui:
         return self.map_gui.field_priority[x][y]
 
     def _place_town(self):
-        self.chosen_building = BuildingGui(DefenceBuilding("town hall", Dimensions(2, 2), Cost(0, 0, 0), 0, 0, 0),
-                                           "../main/buildings/assets/townhall.png")
+        self.chosen_building = self.building_manager.get_copy(len(self.building_manager.buildings) - 1)
         self._place_building(0, 0)
 
     @staticmethod

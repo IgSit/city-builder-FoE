@@ -83,7 +83,7 @@ class Panel(arcade.Section):
 
     def _create_cards(self):
         cards = []
-        for i in range(len(self.buildings_manager.buildings)):
+        for i in range(len(self.buildings_manager.buildings) - 1):
             cards.append(Card(self.builder_gui, self.buildings_manager, i))
         return cards
 

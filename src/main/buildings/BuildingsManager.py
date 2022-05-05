@@ -27,8 +27,11 @@ class BuildingsManager:
         tower = BuildingGui(DefenceBuilding("tower", Dimensions(1, 1), Cost(0, 0, 0), 0, 0, 0),
                             "../main/buildings/assets/tower.png")
         road = BuildingGui(Road("road", Dimensions(1, 1), Cost(0, 0, 0)), "../main/buildings/assets/road.png")
+        town_hall = BuildingGui(DefenceBuilding("town hall", Dimensions(2, 2), Cost(0, 0, 0), 0, 0, 0),
+                                           "../main/buildings/assets/townhall.png")
 
-        self.buildings: [BuildingGui] = [tower, smith, tree, shed, residential, road]
+        # town hall ma być ostatni
+        self.buildings: [BuildingGui] = [tower, smith, tree, shed, residential, road, residential, town_hall]
 
     def get_copy(self, i: int):
         return deepcopy(self.buildings[i])

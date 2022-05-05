@@ -62,7 +62,8 @@ class Map:
                 self.free[x][y] = True
 
         self.buildings.remove(building)
-        self.find_roads_to_hall()
+        if building.name != "town hall":
+            self.find_roads_to_hall()
 
     def find_building_at_field(self, x: int, y: int) -> Optional[AbstractBuilding]:
         if self.free[x][y]:
