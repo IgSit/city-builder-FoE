@@ -16,6 +16,7 @@ class Button:
         self.idx = idx
         self.hidden = False
         self.manager.enable()
+        self.enabled = True
 
         self.ui_flat_button = arcade.gui.UIFlatButton(text=title, width=(upper_right.x - lower_left.x),
                                                  height=(upper_right.y - lower_left.y))
@@ -29,7 +30,8 @@ class Button:
         @self.ui_flat_button.event("on_click")
         def on_click_flat_button(event):
             try:
-                click_function()
+                if self.enabled:
+                    click_function()
             except TypeError:
                 click_function(self.idx)
 
@@ -45,4 +47,5 @@ class Button:
         if not self.hidden:
             self.manager.remove(self.widget)
             self.hidden = True
+
 
