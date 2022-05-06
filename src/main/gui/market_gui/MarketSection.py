@@ -109,4 +109,4 @@ class OfferCard:
     @staticmethod
     def _calc_position(i: int):
         return Point(20+(SCREEN_WIDTH - PANEL_WIDTH)/2 + 200*(i % 5),
-                     PANEL_HEIGHT - (i // 5)*(SCREEN_HEIGHT-PANEL_HEIGHT)/2)
+                     PANEL_HEIGHT - (i // 5)*70)

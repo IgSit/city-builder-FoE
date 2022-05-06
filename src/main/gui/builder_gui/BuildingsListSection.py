@@ -22,7 +22,7 @@ class BuildingListSection(arcade.View):
         self.builder_gui = builder_gui
         self.buildings_manager = buildings_manager
         self.panel = Panel(builder_gui, buildings_manager,
-                           left=(self.window.width - PANEL_WIDTH), bottom=(1 / 8 * self.window.height),
+                           left=(self.window.width - PANEL_WIDTH), bottom=100,
                            width=(PANEL_WIDTH - 10), height=PANEL_HEIGHT,
                            prevent_dispatch={True}, prevent_dispatch_view={True})
 
@@ -116,4 +116,4 @@ class Card:
     @staticmethod
     def _calc_position(i: int):
         return Point(SCREEN_WIDTH - PANEL_WIDTH + (i % 2) * 150,
-                     SCREEN_HEIGHT - ((i % 6) // 2) / 3 * PANEL_HEIGHT - SCREEN_HEIGHT / 2.5)
+                     860 - ((i % 6) // 2) / 3 * PANEL_HEIGHT - 860 / 2.5)
