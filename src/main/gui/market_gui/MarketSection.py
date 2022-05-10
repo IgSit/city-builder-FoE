@@ -55,7 +55,7 @@ class MarketSection(arcade.View):
 
 
 class MarketPanel(arcade.Section):
-    """Section where is placed interface to manage trade offers"""
+    """Section where interface is placed to manage trade offers"""
 
     def __init__(self, trade_manager: TradeManager, left: int, bottom: int, width: int, height: int, **kwargs):
         super().__init__(left, bottom, width, height, **kwargs)

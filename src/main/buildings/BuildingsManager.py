@@ -8,7 +8,7 @@ from src.main.buildings.Road import Road
 from src.main.buildings.util_classes.Cost import Cost
 from src.main.buildings.util_classes.Dimensions import Dimensions
 from src.main.gui.building_gui.BuildingGui import BuildingGui
-from src.main.resources.Resources import ResourceType
+from src.main.resources.Goods import ResourceType
 
 
 class BuildingsManager:
