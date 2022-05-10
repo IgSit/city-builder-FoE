@@ -1,3 +1,5 @@
+from enum import Enum, auto
+
 from src.main.buildings.AbstractBuilding import AbstractBuilding
 from src.main.buildings.util_classes.Cost import Cost
 
@@ -26,3 +28,9 @@ class Resources:
         self.people += building.cost.people_cost
 
         self.people -= building.add_new_people()
+
+
+class ResourceType(Enum):
+    MONEY, SUPPLY, PEOPLE = auto, auto, auto
+    WHEAT, IRON, WOOD = auto, auto, auto
+    NULL = auto
