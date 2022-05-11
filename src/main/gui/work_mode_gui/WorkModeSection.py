@@ -61,15 +61,26 @@ class WorkModeCard:
         self.building = building
         self.work_mode = work_mode
 
-        self.lower_left = self._calc_position(work_mode)
+        self.lower_left = WorkModeCard._calc_position(work_mode)
         self.upper_right = self.lower_left.add(Point(CARD_WIDTH, CARD_HEIGHT))
 
-        self.button = Button("Accept", self.lower_left, self.upper_right)
+        self.button = Button("Start", lower_left=self.lower_left.add(Point(5, CARD_HEIGHT * 0.75)),
+                             upper_right=self.upper_right.subtract(Point(20, CARD_HEIGHT * 0.1)),
+                             click_function=self.start_work)
 
     def on_draw(self):
         arcade.draw_lrtb_rectangle_filled(self.lower_left.x, self.upper_right.x,
                                           self.upper_right.y, self.lower_left.y,
                                           arcade.csscolor.WHEAT)
+        arcade.draw_text(WorkMode.get_text(self.work_mode),
+                         start_x=WorkModeCard._calc_position(self.work_mode).x + CARD_WIDTH / 9,
+                         start_y=WorkModeCard._calc_position(self.work_mode).y + 10,
+                         color=arcade.csscolor.NAVY,
+                         font_size=20)
+        self.button.draw_button()
+
+    def start_work(self):
+        pass
 
     @staticmethod
     def _calc_position(work_mode):
