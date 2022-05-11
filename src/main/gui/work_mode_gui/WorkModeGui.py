@@ -1,35 +1,39 @@
-import arcade
+from typing import Optional
 
 from src.main.buildings.AbstractBuilding import AbstractBuilding
-
-SCREEN_WIDTH = 0
-SCREEN_HEIGHT = 0
-PANEL_WIDTH = 1000
-PANEL_HEIGHT = 666
-
-
-class WorkModeSection(arcade.View):
-    def __init__(self, building: AbstractBuilding):
-        global SCREEN_WIDTH, SCREEN_HEIGHT
-        super().__init__()
-        SCREEN_WIDTH = self.window.width
-        SCREEN_HEIGHT = self.window.height
-        self.building = building
-        self.panel = WorkModePanel(building,
-                                   left=(self.window.width - PANEL_WIDTH) / 2, bottom=(1 / 8 * self.window.height),
-                                   width=PANEL_WIDTH, height=PANEL_HEIGHT,
-                                   prevent_dispatch={True}, prevent_dispatch_view={True})
-        self.section_manager.add_section(self.panel)
+from src.main.engine.engine import Engine
+from src.main.gui.builder_gui.BuilderGui import BuilderGui
+from src.main.gui.map_gui.MapGui import MapGui
+from src.main.gui.work_mode_gui.WorkModeSection import WorkModeSection
 
 
-class WorkModePanel(arcade.Section):
+class WorkModeGui:
+    def __init__(self, map_gui: MapGui, builder_gui: BuilderGui, engine: Engine):
+        self.map_gui = map_gui
+        self.builder_gui = builder_gui
+        self.engine = engine
+        self.building: Optional[AbstractBuilding] = None
+        self.work_mode_section = WorkModeSection(self.building)
+        self.set_work_mode = False
 
-    def __init__(self, building: AbstractBuilding, left: int, bottom: int, width: int, height: int, **kwargs):
-        super().__init__(left, bottom, width, height, **kwargs)
-        self.building = building
+    def on_draw(self):
+        if self.set_work_mode:
+            self.work_mode_section.on_draw()
 
+    def on_mouse_press(self):
+        if self.builder_gui.mode is None:
+            cords = self.map_gui.find_field_under_cursor()
+            if cords is None:
+                return
+            x, y = cords
+            building = self.engine.find_building_at_field(x, y)
+            if building is None:
+                return
+            self.work_mode_section.building = building
+            self.set_work_mode = True
 
-class WorkModeCard:
-
-    def __init__(self, building: AbstractBuilding):
-        self.building = building
+    def on_quit(self):
+        if self.set_work_mode:
+            self.set_work_mode = False
+            return True
+        return False

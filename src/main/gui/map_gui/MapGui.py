@@ -4,6 +4,7 @@ from math import inf
 from src.main.engine.engine import Engine
 from src.main.gui.building_gui.BuildingGui import BuildingGui
 from src.main.gui.util_classes.Point import Point
+from src.main.gui.work_mode_gui.WorkModeSection import WorkModeSection
 
 
 class MapGui:

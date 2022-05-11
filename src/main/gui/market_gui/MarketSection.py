@@ -36,6 +36,12 @@ class MarketSection(arcade.View):
             for card in self.cards:
                 card.disable_button()
 
+    def on_quit(self):
+        if self._trade_mode:
+            self._trade_mode = False
+            return True
+        return False
+
     def change_mode(self):
         self._trade_mode = not self._trade_mode
 

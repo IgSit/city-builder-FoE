@@ -5,6 +5,7 @@ from src.main.gui.builder_gui.BuilderGui import BuilderGui
 from src.main.gui.controls_gui.ControlsGui import ControlsGui
 from src.main.gui.map_gui.MapGui import MapGui
 from src.main.gui.market_gui.MarketSection import MarketSection
+from src.main.gui.work_mode_gui.WorkModeGui import WorkModeGui
 
 
 class Gui(arcade.Window):
@@ -16,6 +17,7 @@ class Gui(arcade.Window):
         self.map_gui = MapGui(engine)
         self.builder_gui = BuilderGui(self.map_gui, engine)
         self.controls_gui = ControlsGui(self.builder_gui, self.map_gui, self.market_section, engine)
+        self.work_mode_gui = WorkModeGui(self.map_gui, self.builder_gui, self.engine)
 
     def run(self):
         arcade.run()
@@ -26,10 +28,12 @@ class Gui(arcade.Window):
         self.builder_gui.on_draw()
         self.controls_gui.on_draw()
         self.market_section.on_draw()
+        self.work_mode_gui.on_draw()
 
     def on_mouse_press(self, x: float, y: float, button: int, modifiers: int):
         if button == 1:  # left
             self.builder_gui.on_mouse_press(x, y)
+            self.work_mode_gui.on_mouse_press()
 
     def on_mouse_drag(self, x: float, y: float, dx: float, dy: float, buttons: int, modifiers: int):
         if buttons == 2:  # middle mouse button
@@ -44,6 +48,10 @@ class Gui(arcade.Window):
         if symbol == arcade.key.ESCAPE:
             self._escape_click()
 
-    @staticmethod
-    def _escape_click():
-        arcade.exit()
+    def _escape_click(self):
+        if self.builder_gui.on_quit() or self.work_mode_gui.on_quit():
+            return
+        if self.market_section.on_quit():
+            return
+        else:
+            arcade.exit()

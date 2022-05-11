@@ -51,17 +51,12 @@ class BuilderGui:
             self.chosen_building = self.building_manager.get_copy_from_building(building)
         elif self.mode == "SELL":
             self._remove_building(x, y)
-        else:
-            # kod tylko pokazujący, że działa, docelowo do usunięcia
-            cords = self.map_gui.find_field_under_cursor()
-            if cords is None:
-                return
-            x, y = cords
-            building = self.engine.find_building_at_field(x, y)
-            if building is None:
-                return
-            print("Connected to town hall", building.connected_to_town)
-            # aż dotąd
+
+    def on_quit(self):
+        if self.mode is not None:
+            self.mode = None
+            return True
+        return False
 
     def _colour_building_tiles(self):
         cords = self.map_gui.find_field_under_cursor()
