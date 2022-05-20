@@ -6,9 +6,9 @@ class Resources:
     """Class storing info about 3 main resources, used to place/delete buildings"""
 
     def __init__(self):
-        self.money = 1000
-        self.supply = 1000
-        self.people = 15
+        self.money = 1000000
+        self.supply = 1000000
+        self.people = 15000
 
     def has_enough_resources(self, building: AbstractBuilding):
         cost: Cost = building.cost

@@ -32,16 +32,10 @@ class BuilderGui:
             self.chosen_building.sprite.draw()
 
     def on_mouse_motion(self, x: float, y: float):
-        if self.chosen_building is not None:
-            scale = self.chosen_building.sprite.scale
-            self.chosen_building.sprite.center_x = x
-            self.chosen_building.sprite.bottom = y - self.tile_size / 2 * scale / 0.78
+        self._set_chosen_building_sprite_coordinates(x, y)
 
     def on_mouse_drag(self, x: float, y: float):
-        if self.chosen_building is not None:
-            scale = self.chosen_building.sprite.scale
-            self.chosen_building.sprite.center_x = x
-            self.chosen_building.sprite.bottom = y - self.tile_size / 2 * scale / 0.78
+        self._set_chosen_building_sprite_coordinates(x, y)
 
     def on_mouse_press(self, x: float, y: float):
         if self.chosen_building is not None:
@@ -49,14 +43,22 @@ class BuilderGui:
         elif self.mode == "MOVE":
             building: AbstractBuilding = self._remove_building(x, y)
             self.chosen_building = self.building_manager.get_copy_from_building(building)
+            self._set_chosen_building_sprite_coordinates(x, y)
         elif self.mode == "SELL":
             self._remove_building(x, y)
 
     def on_quit(self):
         if self.mode is not None:
             self.mode = None
+            self.chosen_building = None
             return True
         return False
+
+    def _set_chosen_building_sprite_coordinates(self, x: float, y: float):
+        if self.chosen_building is not None:
+            scale = self.chosen_building.sprite.scale
+            self.chosen_building.sprite.center_x = x
+            self.chosen_building.sprite.bottom = y - self.tile_size / 2 * scale / 0.78
 
     def _colour_building_tiles(self):
         cords = self.map_gui.find_field_under_cursor()
@@ -113,7 +115,8 @@ class BuilderGui:
 
     def _lower_left_priority(self, building_gui: BuildingGui):
         x, y = building_gui.lower_left()
-        return self.map_gui.field_priority[x][y]
+        a, b = self.map_gui.field_priority[x][y]
+        return a, building_gui.building_priority, (-1 + 2*(building_gui.building_priority != 2))*b
 
     def _place_town(self):
         self.chosen_building = self.building_manager.get_copy(len(self.building_manager.buildings) - 1)

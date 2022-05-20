@@ -11,9 +11,13 @@ class BuildingGui:
         self.building: AbstractBuilding = building
         self.asset_path: str = asset_path
         self.screen_coordinates: Point = Point(0, 0)
-        self.sprite: arcade.Sprite = arcade.Sprite(asset_path, scale=0.6)
+        self.sprite: arcade.Sprite = arcade.Sprite(asset_path, scale=0.7)
+        self.building_priority = {(1, 1): 0, (2, 1): 1, (1, 2): 2, (2, 2): 3}[(self.building.dimensions.width,
+                                                                               self.building.dimensions.length)]
 
     def lower_left(self):
         x = self.building.map_position[0] + self.building.dimensions.width - 1
-        y = self.building.map_position[1]
+        y = self.building.map_position[1] + self.building.dimensions.length - 1
         return x, y
+
+

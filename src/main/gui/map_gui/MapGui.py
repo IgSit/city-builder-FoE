@@ -25,6 +25,8 @@ class MapGui:
         self.isometric_map = self._create_map()
         self.middle_points = self._create_middle_points()
         self.field_priority = self._create_field_priority()
+        self.background_sprite = arcade.Sprite("./gui/map_gui/assets/background.png", center_x=self.screen_width/2,
+                                               center_y=self.screen_height/2)
 
     def on_mouse_motion(self, x: float, y: float):
         self.mouse_position = Point(x, y)
@@ -36,6 +38,8 @@ class MapGui:
         self.offset.set_y(min(max(self.offset.y, -250), 350))
 
     def on_draw(self):
+        self._update_background_coords()
+        self.background_sprite.draw()
         for x in range(self.length):
             for y in range(self.width):
                 polygon = self.isometric_map[x][y]
@@ -104,6 +108,10 @@ class MapGui:
             if building.sprite == sprite:
                 self.map_buildings.remove(building)
 
+    def _update_background_coords(self):
+        self.background_sprite.center_x = self.screen_width/2 + self.offset.x
+        self.background_sprite.center_y = self.screen_height/2 + self.offset.y
+
     def _create_map(self):
         """
         Creates iso map containing tiles of a map.
@@ -137,7 +145,7 @@ class MapGui:
     def _create_field_priority(self):
         n = max(self.width, self.length)
         m = 2*n-1-abs(self.width - self.length)
-        priority_map = [[0 for _ in range(self.length)] for _ in range(self.width)]
+        priority_map = list(reversed([list(reversed([[i+j, 0] for j in range(self.length)])) for i in range(self.width)]))
         x = 0
         y = min(self.width, self.length)-1
         fields = {(x+i+j, y-i+j): (i, j) for i in range(self.width) for j in range(self.length)}
@@ -146,7 +154,7 @@ class MapGui:
             for j in range(m):
                 if (i, j) in fields.keys():
                     a, b = fields[(i, j)]
-                    priority_map[a][b] = k
+                    priority_map[a][b][1] = k
                     k -= 1
         return priority_map
 

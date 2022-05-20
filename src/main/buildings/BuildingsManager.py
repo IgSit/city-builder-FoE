@@ -8,6 +8,7 @@ from src.main.buildings.Road import Road
 from src.main.buildings.util_classes.Cost import Cost
 from src.main.buildings.util_classes.Dimensions import Dimensions
 from src.main.gui.building_gui.BuildingGui import BuildingGui
+from src.main.gui.util_classes.Point import Point
 from src.main.resources.Goods import ResourceType
 
 
@@ -19,6 +20,10 @@ class BuildingsManager:
     def __init__(self):
         residential = BuildingGui(ResidentialBuilding("residential", Dimensions(1, 1), Cost(200, 200, 0), 5),
                                   "../main/buildings/assets/temp4.png")
+        tenement = BuildingGui(ResidentialBuilding("tenement", Dimensions(2, 1), Cost(400, 400, 0), 15),
+                                      "../main/buildings/assets/tenement.png")
+        mansion = BuildingGui(ResidentialBuilding("mansion", Dimensions(2, 2), Cost(800, 800, 0), 40),
+                               "../main/buildings/assets/mansion.png")
         shed = BuildingGui(ProductionBuilding("shed", Dimensions(1, 2), Cost(100, 50, 2),
                                               ResourceType.NULL, ResourceType.WHEAT),
                            "../main/buildings/assets/shed.png")
@@ -31,11 +36,13 @@ class BuildingsManager:
         tower = BuildingGui(DefenceBuilding("tower", Dimensions(1, 1), Cost(700, 1000, 10), 0, 0, 0),
                             "../main/buildings/assets/tower.png")
         road = BuildingGui(Road("road", Dimensions(1, 1), Cost(50, 50, 0)), "../main/buildings/assets/road.png")
+        road.sprite.scale = 0.78
         town_hall = BuildingGui(DefenceBuilding("town hall", Dimensions(2, 2), Cost(0, 0, 0), 0, 0, 0),
                                 "../main/buildings/assets/townhall.png")
 
         # town hall ma być ostatni
-        self.buildings: [BuildingGui] = [tower, smith, tree, shed, residential, road, residential, town_hall]
+        self.buildings: [BuildingGui] = [road, tower, smith, tree, shed, residential, tenement, mansion,
+                                         town_hall]
 
     def get_copy(self, i: int):
         return deepcopy(self.buildings[i])
