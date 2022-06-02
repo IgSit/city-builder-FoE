@@ -1,6 +1,6 @@
 import arcade
 
-from src.main.engine.engine import Engine
+from src.main.engine.Engine import Engine
 from src.main.gui.builder_gui.BuilderGui import BuilderGui
 from src.main.gui.controls_gui.ControlsGui import ControlsGui
 from src.main.gui.map_gui.MapGui import MapGui
@@ -13,7 +13,7 @@ class Gui(arcade.Window):
     def __init__(self, engine: Engine):
         super().__init__(100, 800, fullscreen=True)
         self.engine = engine
-        self.market_section = MarketSection()
+        self.market_section = MarketSection(engine)
         self.map_gui = MapGui(engine)
         self.builder_gui = BuilderGui(self.map_gui, engine)
         self.controls_gui = ControlsGui(self.builder_gui, self.map_gui, self.market_section, engine)

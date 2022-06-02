@@ -1,7 +1,7 @@
 from typing import Optional
 
 from src.main.buildings.AbstractBuilding import AbstractBuilding
-from src.main.engine.engine import Engine
+from src.main.engine.Engine import Engine
 from src.main.gui.builder_gui.BuilderGui import BuilderGui
 from src.main.gui.map_gui.MapGui import MapGui
 from src.main.gui.work_mode_gui.WorkModeSection import WorkModeSection

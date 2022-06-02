@@ -1,5 +1,5 @@
 from gui.gui import Gui
-from engine.engine import Engine
+from engine.Engine import Engine
 
 
 if __name__ == '__main__':

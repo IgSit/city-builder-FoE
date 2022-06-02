@@ -4,7 +4,7 @@ from typing import Optional
 
 from src.main.buildings.AbstractBuilding import AbstractBuilding
 from src.main.buildings.util_classes.Dimensions import Dimensions
-from src.main.engine.engine import Engine
+from src.main.engine.Engine import Engine
 from src.main.gui.builder_gui.BuildingsListSection import BuildingListSection
 from src.main.gui.building_gui.BuildingGui import BuildingGui
 from src.main.gui.map_gui.MapGui import MapGui

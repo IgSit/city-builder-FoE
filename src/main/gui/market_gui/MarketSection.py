@@ -1,5 +1,6 @@
 import arcade
 
+from src.main.engine.Engine import Engine
 from src.main.gui.util_classes.Button import Button
 from src.main.gui.util_classes.Point import Point
 from src.main.trade_offers.TradeManager import TradeManager
@@ -11,13 +12,13 @@ PANEL_HEIGHT = 666
 
 
 class MarketSection(arcade.View):
-    def __init__(self):
+    def __init__(self, engine: Engine):
         global SCREEN_WIDTH, SCREEN_HEIGHT
         super().__init__()
         SCREEN_WIDTH = self.window.width
         SCREEN_HEIGHT = self.window.height
         self._trade_mode = False
-        self.trade_manager = TradeManager()
+        self.trade_manager = TradeManager(engine)
         self.cards: [OfferCard] = []
         self.panel = MarketPanel(self.trade_manager,
                                  left=(self.window.width - PANEL_WIDTH) / 2, bottom=(1 / 8 * self.window.height),

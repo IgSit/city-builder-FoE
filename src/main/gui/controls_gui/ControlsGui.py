@@ -1,6 +1,6 @@
 import arcade
 
-from src.main.engine.engine import Engine
+from src.main.engine.Engine import Engine
 from src.main.gui.builder_gui.BuilderGui import BuilderGui
 from src.main.gui.map_gui.MapGui import MapGui
 from src.main.gui.market_gui.MarketSection import MarketSection
@@ -37,8 +37,10 @@ class ControlsGui(arcade.View):
         self.resources = self.engine.get_resources()
         width, height, separator = 70, 25, 20
         texts = ["M: " + str(self.resources.money_cost), "S: " + str(self.resources.supply_cost),
-                 "P: " + str(self.resources.people_cost)]
-        for i in range(3):
+                 "P: " + str(self.resources.people_cost), "WH: " + str(self.resources.wheat_cost),
+                 "I: " + str(self.resources.iron_cost), "W: " + str(self.resources.wood_cost),
+                 ]
+        for i in range(len(texts)):
             arcade.draw_lrtb_rectangle_outline(left=width*i + (i + 1)*separator, right=(i + 1)*(width + separator),
                                                top=self.window.height - separator,
                                                bottom=self.window.height - height - separator,

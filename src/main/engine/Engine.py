@@ -2,7 +2,9 @@ from src.main.buildings.util_classes.Cost import Cost
 from src.main.gui.util_classes.Point import Point
 from src.main.map.map import Map
 from src.main.buildings.AbstractBuilding import AbstractBuilding
+from src.main.resources.Goods import ResourceQuantity
 from src.main.resources.Resources import Resources
+from src.main.trade_offers.TradeManager import Offer
 
 
 class Engine:
@@ -28,7 +30,7 @@ class Engine:
         if mode == "MOVE":
             return self.map.possible_to_place(lower_left, building)
 
-        return self.map.possible_to_place(lower_left, building) and self.resources.has_enough_resources(building)
+        return self.map.possible_to_place(lower_left, building) and self.resources.has_enough_resources(building.cost)
 
     def place_building(self, lower_left: Point, building: AbstractBuilding, mode: str):
         self.map.place_building(lower_left, building)
@@ -68,4 +70,13 @@ class Engine:
         return self.map.free[i][j]
 
     def get_resources(self):
-        return Cost(self.resources.money, self.resources.supply, self.resources.people)
+        return self.resources.get_resources()
+
+    def is_valid_offer(self, offer_good: ResourceQuantity):
+        return self.resources.has_enough_resource(offer_good)
+
+    def add_resource(self, resource: ResourceQuantity):
+        return self.resources.operation_on_resource(resource, lambda x, y: x+y)
+
+    def remove_resource(self, resource: ResourceQuantity):
+        return self.resources.operation_on_resource(resource, lambda x, y: x-y)
