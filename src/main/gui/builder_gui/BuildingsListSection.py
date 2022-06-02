@@ -111,7 +111,7 @@ class Card:
             self.builder_gui.front_building = None
         else:
             self.builder_gui.front_building = self.buildings_manager.get_copy(i)
-            # self.builder_gui.back_building = self.builder_gui.front_building.building
+            self.builder_gui.back_building = self.builder_gui.front_building.building
             self.builder_gui.front_building.sprite.bottom = 800
 
     @staticmethod
