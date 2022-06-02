@@ -20,9 +20,6 @@ class WorkModeGui:
         if self.set_work_mode:
             self.work_mode_section.on_draw()
 
-    def on_update(self, dt: float):
-        self.work_mode_section.on_update(dt)
-
     def on_mouse_press(self):
         if self.builder_gui.mode is None:
             cords = self.map_gui.find_field_under_cursor()

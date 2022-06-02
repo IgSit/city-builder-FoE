@@ -23,7 +23,7 @@ class AbstractBuilding(ABC):
 
     def on_update(self, dt: float):
         if self.connected_to_town and self.time_left > 0:
-            self.time_left -= dt / 2
+            self.time_left -= dt
             if self.time_left <= 0:
                 self.time_left = 0
                 self.on_finish_work()

@@ -32,9 +32,6 @@ class WorkModeSection(arcade.View):
         if self._work_mode:
             self.panel.on_draw()
 
-    def on_update(self, dt: float):
-        self.panel.on_update(dt)
-
 
 class WorkModePanel(arcade.Section):
 
@@ -53,10 +50,6 @@ class WorkModePanel(arcade.Section):
 
         for card in self.cards:
             card.on_draw()
-
-    def on_update(self, dt: float):
-        for card in self.cards:
-            card.on_update(dt)
 
     def _create_cards(self):
         cards = []
@@ -91,10 +84,6 @@ class WorkModeCard:
         self.button.draw_button()
         if self.building.work_mode == self.work_mode and self.building.time_left > 0:
             self._draw_time()
-
-    def on_update(self, dt: float):
-        if self.building is not None:
-            self.building.on_update(dt)
 
     def _draw_time(self):
         arcade.draw_text("Time left:",

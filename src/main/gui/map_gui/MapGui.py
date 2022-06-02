@@ -53,6 +53,10 @@ class MapGui:
             building.sprite.bottom = building.screen_coordinates.y + self.offset.y
             building.sprite.draw()
 
+    def on_update(self, dt: float):
+        for building_gui in self.map_buildings:
+            building_gui.building.on_update(dt)
+
     def find_field_under_cursor(self):
         """
         If cursor is on the map, return the (x, y) tuple containing coordinates of map tile (row/column indexes).

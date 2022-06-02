@@ -35,7 +35,7 @@ class Gui(arcade.Window):
         self.work_mode_gui.on_draw()
 
     def on_update(self, dt: float):
-        self.work_mode_gui.on_update(dt)
+        self.map_gui.on_update(dt)
 
     def on_mouse_press(self, x: float, y: float, button: int, modifiers: int):
         if button == 1:  # left
