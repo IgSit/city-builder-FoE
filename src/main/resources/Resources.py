@@ -29,18 +29,12 @@ class Resources:
         return self.resources_dict[good.resource].quantity >= good.quantity
 
     def on_building(self, building: AbstractBuilding):
-        for type_, good in self.resources_dict.items():
-            good.quantity -= building.cost.cost_dict[type_]
-
+        self.operation_on_resources(building.cost, lambda x, y: x.quantity - y)
         self.people.quantity += building.add_new_people()
 
     def on_destroy(self, building: AbstractBuilding):
-        for type_, good in self.resources_dict.items():
-            if good.resource != ResourceType.PEOPLE:
-                good.quantity += building.cost.cost_dict[type_] // 2
-            else:
-                good.quantity += building.cost.cost_dict[type_]
-
+        self.operation_on_resources(building.cost, lambda x, y: x.quantity + y // 2
+        if x.resource != ResourceType.PEOPLE else x.quantity + y)
         self.people.quantity -= building.add_new_people()
 
     def get_resources(self):
@@ -56,3 +50,7 @@ class Resources:
     def operation_on_resource(self, good: ResourceQuantity, func):
         self.resources_dict[good.resource].quantity = \
             func(self.resources_dict[good.resource].quantity, good.quantity)
+
+    def operation_on_resources(self, cost: Cost, func):
+        for type_, good in self.resources_dict.items():
+            good.quantity = func(good, cost.cost_dict[type_])

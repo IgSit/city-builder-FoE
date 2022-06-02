@@ -4,17 +4,20 @@ from src.main.engine.Engine import Engine
 from src.main.gui.builder_gui.BuilderGui import BuilderGui
 from src.main.gui.map_gui.MapGui import MapGui
 from src.main.gui.market_gui.MarketSection import MarketSection
+from src.main.gui.technologies_gui.TechnologiesSection import TechnologiesSection
 from src.main.gui.util_classes.Button import Button
 from src.main.gui.util_classes.Point import Point
 
 
 class ControlsGui(arcade.View):
 
-    def __init__(self, builder_gui: BuilderGui, map_gui: MapGui, market_section: MarketSection, engine: Engine):
+    def __init__(self, builder_gui: BuilderGui, map_gui: MapGui, market_section: MarketSection,
+                 tech_section: TechnologiesSection, engine: Engine):
         super().__init__()
         self.builder_gui: BuilderGui = builder_gui
         self.map_gui: MapGui = map_gui
         self.market_section: MarketSection = market_section
+        self.tech_section = tech_section
         self.buttons: [Button] = self._init_buttons()
         self.engine = engine
         self.resources = self.engine.get_resources()
@@ -57,7 +60,7 @@ class ControlsGui(arcade.View):
         self.builder_gui.mode = "SELL"
 
     def _toggle_tech_mode(self):
-        pass
+        self.tech_section.change_mode()
 
     def _toggle_market_mode(self):
         self.market_section.change_mode()
