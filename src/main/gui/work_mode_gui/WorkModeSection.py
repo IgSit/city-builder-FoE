@@ -1,6 +1,7 @@
 import arcade
 
 from src.main.buildings.AbstractBuilding import AbstractBuilding
+from src.main.engine.Engine import Engine
 from src.main.gui.util_classes.Button import Button
 from src.main.gui.util_classes.Point import Point
 from src.main.work_modes.WorkModes import WorkMode
@@ -14,14 +15,14 @@ CARD_HEIGHT = 200
 
 
 class WorkModeSection(arcade.View):
-    def __init__(self, building: AbstractBuilding):
+    def __init__(self, building: AbstractBuilding, engine: Engine):
         global SCREEN_WIDTH, SCREEN_HEIGHT
         super().__init__()
         SCREEN_WIDTH = self.window.width
         SCREEN_HEIGHT = self.window.height
-        self.building = building
-        self._work_mode = True
-        self.panel = WorkModePanel(building,
+        self.building: AbstractBuilding = building
+        self._work_mode: bool = True
+        self.panel = WorkModePanel(building, engine,
                                    left=(self.window.width - PANEL_WIDTH) / 2, bottom=(1 / 8 * self.window.height),
                                    width=PANEL_WIDTH, height=PANEL_HEIGHT,
                                    prevent_dispatch={True}, prevent_dispatch_view={True})
@@ -37,9 +38,11 @@ class WorkModeSection(arcade.View):
 
 class WorkModePanel(arcade.Section):
 
-    def __init__(self, building: AbstractBuilding, left: int, bottom: int, width: int, height: int, **kwargs):
+    def __init__(self, building: AbstractBuilding, engine: Engine,
+                 left: int, bottom: int, width: int, height: int, **kwargs):
         super().__init__(left, bottom, width, height, **kwargs)
-        self.building = building
+        self.building: AbstractBuilding = building
+        self.engine: Engine = engine
         self.cards: [WorkModeCard] = self._create_cards()
 
     def on_draw(self):
@@ -58,14 +61,15 @@ class WorkModePanel(arcade.Section):
     def _create_cards(self):
         cards = []
         for work_mode in [WorkMode.EFFICIENT, WorkMode.MODERATE, WorkMode.LAZY]:
-            cards.append(WorkModeCard(self.building, work_mode))
+            cards.append(WorkModeCard(self.building, self.engine, work_mode))
         return cards
 
 
 class WorkModeCard:
 
-    def __init__(self, building: AbstractBuilding, work_mode: WorkMode):
+    def __init__(self, building: AbstractBuilding, engine: Engine, work_mode: WorkMode):
         self.building: AbstractBuilding = building
+        self.engine: Engine = engine
         self.work_mode: WorkMode = work_mode
 
         self.lower_left = WorkModeCard._calc_position(work_mode)
@@ -105,8 +109,8 @@ class WorkModeCard:
                          font_size=15)
 
     def _start_work(self):
-        self.building.time_left = self.work_mode.value
-        self.building.work_mode = self.work_mode
+        if self.engine.can_start_work(self.building, self.work_mode):
+            self.engine.start_work(self.building, self.work_mode)
 
     def _stringify_time(self):
         hours = int(self.building.time_left // 3600)

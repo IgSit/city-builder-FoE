@@ -13,7 +13,7 @@ class WorkModeGui:
         self.builder_gui = builder_gui
         self.engine = engine
         self.building: Optional[AbstractBuilding] = None
-        self.work_mode_section = WorkModeSection(self.building)
+        self.work_mode_section = WorkModeSection(self.building, self.engine)
         self.set_work_mode = False
 
     def on_draw(self):

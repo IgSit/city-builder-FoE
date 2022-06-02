@@ -16,7 +16,7 @@ class Technology:
         self.required_technology = None
 
     def unlock(self):
-        #TODO check if there is enough resources
+        # TODO check if there is enough resources
         if self.required_technology is None or self.required_technology.unlocked:
             self.unlocked = True
 
@@ -29,4 +29,3 @@ class TechnologyBranch:
         self.advanced = advanced
         self.intermediate.required_technology = self.basic
         self.advanced.required_technology = self.intermediate
-

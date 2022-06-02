@@ -1,8 +1,8 @@
 from abc import ABC
 from typing import Optional
 
-from src.main.buildings.util_classes import Dimensions, Cost
-from src.main.resources.Goods import ResourceQuantity, ResourceType
+from src.main.buildings.util_classes.Dimensions import Dimensions
+from src.main.buildings.util_classes.Cost import Cost
 from src.main.work_modes.WorkModes import WorkMode
 
 
@@ -23,8 +23,25 @@ class AbstractBuilding(ABC):
 
     def on_update(self, dt: float):
         if self.connected_to_town and self.time_left > 0:
-            self.time_left -= dt
-            self.time_left = max(self.time_left, 0)
+            self.time_left -= dt / 2
+            if self.time_left <= 0:
+                self.time_left = 0
+                self.on_finish_work()
+
+    def on_start_work(self, mode: WorkMode):
+        """Gather user resources when building starts to work"""
+        self.work_mode = mode
+        self.time_left = mode.value
+        # todo apply cost of starting work to resources (in Production Building)
+
+    def on_finish_work(self):
+        self.work_mode = None
+        # todo apply cost of starting work to resources (in Production Building)
+
+    @staticmethod
+    def get_work_cost(mode: WorkMode):
+        if mode in [WorkMode.LAZY, WorkMode.MODERATE, WorkMode.EFFICIENT]:
+            return Cost()
 
     @staticmethod
     def add_new_people():
@@ -34,23 +51,3 @@ class AbstractBuilding(ABC):
     @staticmethod
     def is_road():
         return False
-
-    @staticmethod
-    def on_start_work(mode: WorkMode) -> ResourceQuantity:
-        """Gather user resources when building starts to work"""
-        if mode == WorkMode.EFFICIENT:
-            return ResourceQuantity(ResourceType.NULL, 0)
-        if mode == WorkMode.MODERATE:
-            return ResourceQuantity(ResourceType.NULL, 0)
-        if mode == WorkMode.LAZY:
-            return ResourceQuantity(ResourceType.NULL, 0)
-
-    @staticmethod
-    def on_finish_work(mode: WorkMode) -> ResourceQuantity:
-        """Give user new resources when work is finished"""
-        if mode == WorkMode.EFFICIENT:
-            return ResourceQuantity(ResourceType.NULL, 0)
-        if mode == WorkMode.MODERATE:
-            return ResourceQuantity(ResourceType.NULL, 0)
-        if mode == WorkMode.LAZY:
-            return ResourceQuantity(ResourceType.NULL, 0)

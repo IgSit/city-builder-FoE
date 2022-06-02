@@ -8,7 +8,6 @@ from src.main.buildings.Road import Road
 from src.main.buildings.util_classes.Cost import Cost
 from src.main.buildings.util_classes.Dimensions import Dimensions
 from src.main.gui.building_gui.BuildingGui import BuildingGui
-from src.main.gui.util_classes.Point import Point
 from src.main.resources.Goods import ResourceType
 
 
@@ -21,9 +20,9 @@ class BuildingsManager:
         residential = BuildingGui(ResidentialBuilding("residential", Dimensions(1, 1), Cost(200, 200, 0), 5),
                                   "../main/buildings/assets/temp4.png")
         tenement = BuildingGui(ResidentialBuilding("tenement", Dimensions(2, 1), Cost(400, 400, 0), 15),
-                                      "../main/buildings/assets/tenement.png")
+                               "../main/buildings/assets/tenement.png")
         mansion = BuildingGui(ResidentialBuilding("mansion", Dimensions(2, 2), Cost(800, 800, 0), 40),
-                               "../main/buildings/assets/mansion.png")
+                              "../main/buildings/assets/mansion.png")
         shed = BuildingGui(ProductionBuilding("shed", Dimensions(1, 2), Cost(100, 50, 2),
                                               ResourceType.NULL, ResourceType.WHEAT),
                            "../main/buildings/assets/shed.png")

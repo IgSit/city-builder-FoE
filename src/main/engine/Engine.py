@@ -4,7 +4,7 @@ from src.main.map.map import Map
 from src.main.buildings.AbstractBuilding import AbstractBuilding
 from src.main.resources.Goods import ResourceQuantity
 from src.main.resources.Resources import Resources
-from src.main.trade_offers.TradeManager import Offer
+from src.main.work_modes.WorkModes import WorkMode
 
 
 class Engine:
@@ -31,6 +31,14 @@ class Engine:
             return self.map.possible_to_place(lower_left, building)
 
         return self.map.possible_to_place(lower_left, building) and self.resources.has_enough_resources(building.cost)
+
+    def can_start_work(self, building: AbstractBuilding, mode: WorkMode):
+        cost: Cost = building.get_work_cost(mode)
+        return self.resources.has_enough_resources(cost)
+
+    @staticmethod
+    def start_work(building: AbstractBuilding, mode: WorkMode):
+        building.on_start_work(mode)
 
     def place_building(self, lower_left: Point, building: AbstractBuilding, mode: str):
         self.map.place_building(lower_left, building)
