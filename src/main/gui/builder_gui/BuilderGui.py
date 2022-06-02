@@ -17,7 +17,7 @@ class BuilderGui:
         self.map_gui: MapGui = map_gui
         self.engine: Engine = engine
         self.front_building: Optional[BuildingGui] = None
-        self.back_building: Optional[AbstractBuilding] = None
+        # self.back_building: Optional[AbstractBuilding] = None
         self.mode: Optional[str] = None
         self.tile_size: int = tile_size
         self.screen_width, self.screen_height = arcade.window_commands.get_display_size()
@@ -42,8 +42,8 @@ class BuilderGui:
         if self.front_building is not None:
             self._place_building()
         elif self.mode == "MOVE":
-            self.back_building = self._remove_building(x, y)
-            self.front_building = self.building_manager.get_copy_from_building(self.back_building)
+            building: AbstractBuilding = self._remove_building(x, y)
+            self.front_building = self.building_manager.get_copy_from_building(building)
             self._set_chosen_building_sprite_coordinates(x, y)
         elif self.mode == "SELL":
             self._remove_building(x, y)
@@ -82,15 +82,15 @@ class BuilderGui:
             i, j = coords
 
         if self.engine.possible_to_place(Point(i, j), self.front_building.building, self.mode):
-            self.back_building.map_position = (i, j)
+            self.front_building.building.map_position = (i, j)
             self.map_gui.map_buildings.append(self.front_building)
             self.map_gui.map_buildings.sort(key=self._lower_left_priority)
             a, b = self.map_gui.get_middle_point(i, j)
             scale = self.front_building.sprite.scale
-            dimensions = self.back_building.dimensions
+            dimensions = self.front_building.building.dimensions
             self.front_building.screen_coordinates = Point(a + self._calc_ratio(dimensions) * self.tile_size,
                                                            b - self.tile_size / 2 * scale / 0.78)
-            self.engine.place_building(Point(i, j), self.back_building, self.mode)
+            self.engine.place_building(Point(i, j), self.front_building.building, self.mode)
             self.front_building = None
 
     def _remove_building(self, x: float, y: float):
@@ -121,7 +121,6 @@ class BuilderGui:
 
     def _place_town(self):
         self.front_building = self.building_manager.get_copy(len(self.building_manager.buildings) - 1)
-        self.back_building = self.front_building.building
         self._place_building(0, 0)
 
     @staticmethod
