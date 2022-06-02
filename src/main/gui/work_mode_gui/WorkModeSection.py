@@ -31,6 +31,9 @@ class WorkModeSection(arcade.View):
         if self._work_mode:
             self.panel.on_draw()
 
+    def on_update(self, dt: float):
+        self.panel.on_update(dt)
+
 
 class WorkModePanel(arcade.Section):
 
@@ -48,6 +51,10 @@ class WorkModePanel(arcade.Section):
         for card in self.cards:
             card.on_draw()
 
+    def on_update(self, dt: float):
+        for card in self.cards:
+            card.on_update(dt)
+
     def _create_cards(self):
         cards = []
         for work_mode in [WorkMode.EFFICIENT, WorkMode.MODERATE, WorkMode.LAZY]:
@@ -58,15 +65,15 @@ class WorkModePanel(arcade.Section):
 class WorkModeCard:
 
     def __init__(self, building: AbstractBuilding, work_mode: WorkMode):
-        self.building = building
-        self.work_mode = work_mode
+        self.building: AbstractBuilding = building
+        self.work_mode: WorkMode = work_mode
 
         self.lower_left = WorkModeCard._calc_position(work_mode)
         self.upper_right = self.lower_left.add(Point(CARD_WIDTH, CARD_HEIGHT))
 
         self.button = Button("Start", lower_left=self.lower_left.add(Point(5, CARD_HEIGHT * 0.75)),
                              upper_right=self.upper_right.subtract(Point(20, CARD_HEIGHT * 0.1)),
-                             click_function=self.start_work)
+                             click_function=self._start_work)
 
     def on_draw(self):
         arcade.draw_lrtb_rectangle_filled(self.lower_left.x, self.upper_right.x,
@@ -78,9 +85,34 @@ class WorkModeCard:
                          color=arcade.csscolor.NAVY,
                          font_size=20)
         self.button.draw_button()
+        if self.building.work_mode == self.work_mode and self.building.time_left > 0:
+            self._draw_time()
 
-    def start_work(self):
-        pass
+    def on_update(self, dt: float):
+        if self.building is not None:
+            self.building.on_update(dt)
+
+    def _draw_time(self):
+        arcade.draw_text("Time left:",
+                         start_x=WorkModeCard._calc_position(self.work_mode).x + CARD_WIDTH / 9 + 10,
+                         start_y=WorkModeCard._calc_position(self.work_mode).y + 90,
+                         color=arcade.csscolor.DARK_GREEN,
+                         font_size=18)
+        arcade.draw_text(self._stringify_time(),
+                         start_x=WorkModeCard._calc_position(self.work_mode).x + CARD_WIDTH / 9 + 17,
+                         start_y=WorkModeCard._calc_position(self.work_mode).y + 60,
+                         color=arcade.csscolor.DIM_GRAY,
+                         font_size=15)
+
+    def _start_work(self):
+        self.building.time_left = self.work_mode.value
+        self.building.work_mode = self.work_mode
+
+    def _stringify_time(self):
+        hours = int(self.building.time_left // 3600)
+        minutes = int(self.building.time_left // 60)
+        seconds = int(self.building.time_left % 60)
+        return f"{hours:02}:{minutes:02d}:{seconds:02d}"
 
     @staticmethod
     def _calc_position(work_mode):

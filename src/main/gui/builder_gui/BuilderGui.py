@@ -16,7 +16,8 @@ class BuilderGui:
     def __init__(self, map_gui: MapGui, engine: Engine, tile_size: int = 64):
         self.map_gui: MapGui = map_gui
         self.engine: Engine = engine
-        self.chosen_building: Optional[BuildingGui] = None
+        self.front_building: Optional[BuildingGui] = None
+        self.back_building: Optional[AbstractBuilding] = None
         self.mode: Optional[str] = None
         self.tile_size: int = tile_size
         self.screen_width, self.screen_height = arcade.window_commands.get_display_size()
@@ -27,9 +28,9 @@ class BuilderGui:
     def on_draw(self):
         if self.mode == "BUILD":
             self.building_list_section.on_draw()
-        if self.chosen_building is not None:
+        if self.front_building is not None:
             self._colour_building_tiles()
-            self.chosen_building.sprite.draw()
+            self.front_building.sprite.draw()
 
     def on_mouse_motion(self, x: float, y: float):
         self._set_chosen_building_sprite_coordinates(x, y)
@@ -38,11 +39,11 @@ class BuilderGui:
         self._set_chosen_building_sprite_coordinates(x, y)
 
     def on_mouse_press(self, x: float, y: float):
-        if self.chosen_building is not None:
+        if self.front_building is not None:
             self._place_building()
         elif self.mode == "MOVE":
-            building: AbstractBuilding = self._remove_building(x, y)
-            self.chosen_building = self.building_manager.get_copy_from_building(building)
+            self.back_building = self._remove_building(x, y)
+            self.front_building = self.building_manager.get_copy_from_building(self.back_building)
             self._set_chosen_building_sprite_coordinates(x, y)
         elif self.mode == "SELL":
             self._remove_building(x, y)
@@ -50,15 +51,15 @@ class BuilderGui:
     def on_quit(self):
         if self.mode is not None:
             self.mode = None
-            self.chosen_building = None
+            self.front_building = None
             return True
         return False
 
     def _set_chosen_building_sprite_coordinates(self, x: float, y: float):
-        if self.chosen_building is not None:
-            scale = self.chosen_building.sprite.scale
-            self.chosen_building.sprite.center_x = x
-            self.chosen_building.sprite.bottom = y - self.tile_size / 2 * scale / 0.78
+        if self.front_building is not None:
+            scale = self.front_building.sprite.scale
+            self.front_building.sprite.center_x = x
+            self.front_building.sprite.bottom = y - self.tile_size / 2 * scale / 0.78
 
     def _colour_building_tiles(self):
         cords = self.map_gui.find_field_under_cursor()
@@ -66,10 +67,10 @@ class BuilderGui:
             return
 
         x, y = cords
-        free = self.engine.possible_to_place(Point(x, y), self.chosen_building.building, self.mode)
+        free = self.engine.possible_to_place(Point(x, y), self.front_building.building, self.mode)
 
-        for w in range(x, min(x + self.chosen_building.building.dimensions.width, self.map_gui.length)):
-            for k in range(y, min(y + self.chosen_building.building.dimensions.length, self.map_gui.width)):
+        for w in range(x, min(x + self.front_building.building.dimensions.width, self.map_gui.length)):
+            for k in range(y, min(y + self.front_building.building.dimensions.length, self.map_gui.width)):
                 color = arcade.csscolor.SKY_BLUE if free else arcade.csscolor.RED
                 self.map_gui.mark_field(w, k, color)
 
@@ -80,17 +81,17 @@ class BuilderGui:
                 return
             i, j = coords
 
-        if self.engine.possible_to_place(Point(i, j), self.chosen_building.building, self.mode):
-            self.chosen_building.building.map_position = (i, j)
-            self.map_gui.map_buildings.append(self.chosen_building)
+        if self.engine.possible_to_place(Point(i, j), self.front_building.building, self.mode):
+            self.back_building.map_position = (i, j)
+            self.map_gui.map_buildings.append(self.front_building)
             self.map_gui.map_buildings.sort(key=self._lower_left_priority)
             a, b = self.map_gui.get_middle_point(i, j)
-            scale = self.chosen_building.sprite.scale
-            dimensions = self.chosen_building.building.dimensions
-            self.chosen_building.screen_coordinates = Point(a + self._calc_ratio(dimensions) * self.tile_size,
-                                                            b - self.tile_size / 2 * scale / 0.78)
-            self.engine.place_building(Point(i, j), self.chosen_building.building, self.mode)
-            self.chosen_building = None
+            scale = self.front_building.sprite.scale
+            dimensions = self.back_building.dimensions
+            self.front_building.screen_coordinates = Point(a + self._calc_ratio(dimensions) * self.tile_size,
+                                                           b - self.tile_size / 2 * scale / 0.78)
+            self.engine.place_building(Point(i, j), self.back_building, self.mode)
+            self.front_building = None
 
     def _remove_building(self, x: float, y: float):
         coords = self.map_gui.find_field_under_cursor()
@@ -119,7 +120,8 @@ class BuilderGui:
         return a, building_gui.building_priority, (-1 + 2*(building_gui.building_priority != 2))*b
 
     def _place_town(self):
-        self.chosen_building = self.building_manager.get_copy(len(self.building_manager.buildings) - 1)
+        self.front_building = self.building_manager.get_copy(len(self.building_manager.buildings) - 1)
+        self.back_building = self.front_building.building
         self._place_building(0, 0)
 
     @staticmethod

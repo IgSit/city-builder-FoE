@@ -4,7 +4,6 @@ from math import inf
 from src.main.engine.Engine import Engine
 from src.main.gui.building_gui.BuildingGui import BuildingGui
 from src.main.gui.util_classes.Point import Point
-from src.main.gui.work_mode_gui.WorkModeSection import WorkModeSection
 
 
 class MapGui:
@@ -25,8 +24,8 @@ class MapGui:
         self.isometric_map = self._create_map()
         self.middle_points = self._create_middle_points()
         self.field_priority = self._create_field_priority()
-        self.background_sprite = arcade.Sprite("./gui/map_gui/assets/background.png", center_x=self.screen_width/2,
-                                               center_y=self.screen_height/2)
+        self.background_sprite = arcade.Sprite("./gui/map_gui/assets/background.png", center_x=self.screen_width / 2,
+                                               center_y=self.screen_height / 2)
 
     def on_mouse_motion(self, x: float, y: float):
         self.mouse_position = Point(x, y)
@@ -109,8 +108,8 @@ class MapGui:
                 self.map_buildings.remove(building)
 
     def _update_background_coords(self):
-        self.background_sprite.center_x = self.screen_width/2 + self.offset.x
-        self.background_sprite.center_y = self.screen_height/2 + self.offset.y
+        self.background_sprite.center_x = self.screen_width / 2 + self.offset.x
+        self.background_sprite.center_y = self.screen_height / 2 + self.offset.y
 
     def _create_map(self):
         """
@@ -138,17 +137,19 @@ class MapGui:
         return [self._cartesian_to_isometric(x, y) for x, y in rectangle]
 
     def _create_middle_points(self):
-        return [[(d[0] + abs(d[0] - b[0]) / 2 + self.screen_width//2,
-                  a[1] + abs(c[1] - a[1]) / 2 + self.screen_height//16) for a, b, c, d in row]
+        return [[(d[0] + abs(d[0] - b[0]) / 2 + self.screen_width // 2,
+                  a[1] + abs(c[1] - a[1]) / 2 + self.screen_height // 16) for a, b, c, d in row]
                 for row in self.isometric_map]
 
     def _create_field_priority(self):
         n = max(self.width, self.length)
-        m = 2*n-1-abs(self.width - self.length)
-        priority_map = list(reversed([list(reversed([[i+j, 0] for j in range(self.length)])) for i in range(self.width)]))
+        m = 2 * n - 1 - abs(self.width - self.length)
+        priority_map = list(reversed(
+            [list(reversed([[i + j, 0] for j in range(self.length)])) for i in range(self.width)])
+        )
         x = 0
-        y = min(self.width, self.length)-1
-        fields = {(x+i+j, y-i+j): (i, j) for i in range(self.width) for j in range(self.length)}
+        y = min(self.width, self.length) - 1
+        fields = {(x + i + j, y - i + j): (i, j) for i in range(self.width) for j in range(self.length)}
         k = self.width * self.length - 1
         for i in range(m):
             for j in range(m):
@@ -160,7 +161,7 @@ class MapGui:
 
     def _dist(self, x: float, y: float, i: int, j: int):
         a, b = self.middle_points[i][j]
-        return abs(x-a)+abs(y-b)
+        return abs(x - a) + abs(y - b)
 
     def is_tile_free(self, x: int, y: int):
         return self.engine.is_tile_free(x, y)

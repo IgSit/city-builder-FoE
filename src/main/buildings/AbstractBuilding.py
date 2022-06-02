@@ -1,4 +1,6 @@
 from abc import ABC
+from typing import Optional
+
 from src.main.buildings.util_classes import Dimensions, Cost
 from src.main.resources.Goods import ResourceQuantity, ResourceType
 from src.main.work_modes.WorkModes import WorkMode
@@ -11,11 +13,18 @@ class AbstractBuilding(ABC):
     """
 
     def __init__(self, name: str, dimensions: Dimensions, cost: Cost):
-        self.name = name
-        self.dimensions = dimensions
-        self.cost = cost
-        self.map_position = (-1, -1)
-        self.connected_to_town = False
+        self.name: str = name
+        self.dimensions: Dimensions = dimensions
+        self.cost: Cost = cost
+        self.map_position: (int, int) = (-1, -1)
+        self.connected_to_town: bool = False
+        self.work_mode: Optional[WorkMode] = None
+        self.time_left: float = 0
+
+    def on_update(self, dt: float):
+        if self.connected_to_town and self.time_left > 0:
+            self.time_left -= dt
+            self.time_left = max(self.time_left, 0)
 
     @staticmethod
     def add_new_people():

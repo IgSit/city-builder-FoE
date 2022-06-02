@@ -20,6 +20,9 @@ class WorkModeGui:
         if self.set_work_mode:
             self.work_mode_section.on_draw()
 
+    def on_update(self, dt: float):
+        self.work_mode_section.on_update(dt)
+
     def on_mouse_press(self):
         if self.builder_gui.mode is None:
             cords = self.map_gui.find_field_under_cursor()
@@ -30,6 +33,8 @@ class WorkModeGui:
             if building is None:
                 return
             self.work_mode_section.building = building
+            for card in self.work_mode_section.panel.cards:
+                card.building = building
             self.set_work_mode = True
 
     def on_quit(self):

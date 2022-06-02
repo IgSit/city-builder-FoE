@@ -107,11 +107,12 @@ class Card:
         self.sprite.bottom = upper_right.y + 15
 
     def choose_building(self, i: int):
-        if self.builder_gui.chosen_building is not None:
-            self.builder_gui.chosen_building = None
+        if self.builder_gui.front_building is not None:
+            self.builder_gui.front_building = None
         else:
-            self.builder_gui.chosen_building = self.buildings_manager.get_copy(i)
-            self.builder_gui.chosen_building.sprite.bottom = 800
+            self.builder_gui.front_building = self.buildings_manager.get_copy(i)
+            self.builder_gui.back_building = self.builder_gui.front_building.building
+            self.builder_gui.front_building.sprite.bottom = 800
 
     @staticmethod
     def _calc_position(i: int):
