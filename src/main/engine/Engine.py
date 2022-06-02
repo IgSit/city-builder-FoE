@@ -88,3 +88,9 @@ class Engine:
 
     def remove_resource(self, resource: ResourceQuantity):
         return self.resources.operation_on_resource(resource, lambda x, y: x-y)
+
+    def remove_resources(self, cost: Cost):
+        return self.resources.operation_on_resources(cost, lambda x, y: x.quantity - y)
+
+    def has_resources(self, cost: Cost):
+        return self.resources.has_enough_resources(cost)

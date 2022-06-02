@@ -5,6 +5,7 @@ from src.main.gui.builder_gui.BuilderGui import BuilderGui
 from src.main.gui.controls_gui.ControlsGui import ControlsGui
 from src.main.gui.map_gui.MapGui import MapGui
 from src.main.gui.market_gui.MarketSection import MarketSection
+from src.main.gui.technologies_gui.TechnologiesSection import TechnologiesSection
 from src.main.gui.work_mode_gui.WorkModeGui import WorkModeGui
 
 
@@ -16,7 +17,9 @@ class Gui(arcade.Window):
         self.market_section = MarketSection(engine)
         self.map_gui = MapGui(engine)
         self.builder_gui = BuilderGui(self.map_gui, engine)
-        self.controls_gui = ControlsGui(self.builder_gui, self.map_gui, self.market_section, engine)
+        self.tech_section = TechnologiesSection(self.builder_gui.building_manager, engine)
+        self.controls_gui = ControlsGui(self.builder_gui, self.map_gui, self.market_section, self.tech_section,
+                                        self.engine)
         self.work_mode_gui = WorkModeGui(self.map_gui, self.builder_gui, self.engine)
 
     def run(self):
@@ -28,6 +31,7 @@ class Gui(arcade.Window):
         self.builder_gui.on_draw()
         self.controls_gui.on_draw()
         self.market_section.on_draw()
+        self.tech_section.on_draw()
         self.work_mode_gui.on_draw()
 
     def on_update(self, dt: float):
@@ -52,9 +56,11 @@ class Gui(arcade.Window):
             self._escape_click()
 
     def _escape_click(self):
-        if self.builder_gui.on_quit() or self.work_mode_gui.on_quit():
+        if self.tech_section.on_quit():
             return
         if self.market_section.on_quit():
+            return
+        if self.builder_gui.on_quit() or self.work_mode_gui.on_quit():
             return
         else:
             arcade.exit()

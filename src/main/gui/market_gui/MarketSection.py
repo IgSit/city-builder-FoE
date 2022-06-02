@@ -91,7 +91,7 @@ class OfferCard:
         if self.offer is not None:
             self.button.draw_button()
             arcade.draw_text(self.offer.signboard, self.lower_left.x + 20, self.lower_left.y + 50,
-                             arcade.color.GRAY, 20, 100, 'left')
+                             arcade.color.GRAY, 12, 100, 'left')
 
     def disable_button(self):
         self.button.enabled = False
