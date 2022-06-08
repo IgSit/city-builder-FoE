@@ -32,6 +32,7 @@ class AbstractBuilding(ABC):
         """Gather user resources when building starts to work"""
         self.work_mode = mode
         self.time_left = mode.value
+
         # todo apply cost of starting work to resources (in Production Building)
 
     def on_finish_work(self):

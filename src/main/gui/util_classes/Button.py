@@ -17,8 +17,9 @@ class Button:
         self.hidden = False
         self.manager.enable()
         self.enabled = True
+        self.title = title
 
-        self.ui_flat_button = arcade.gui.UIFlatButton(text=title, width=(upper_right.x - lower_left.x),
+        self.ui_flat_button = arcade.gui.UIFlatButton(text=self.title, width=(upper_right.x - lower_left.x),
                                                       height=(upper_right.y - lower_left.y))
         self.v_box.add(self.ui_flat_button.with_space_around(bottom=10, left=10))
         self.widget = arcade.gui.UIAnchorWidget(
@@ -47,3 +48,7 @@ class Button:
         if not self.hidden:
             self.manager.remove(self.widget)
             self.hidden = True
+
+    def rename(self, new_title: str):
+        self.title = new_title
+        self.ui_flat_button.text = self.title

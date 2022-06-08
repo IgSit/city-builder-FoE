@@ -84,13 +84,16 @@ class Engine:
         return self.resources.has_enough_resource(offer_good)
 
     def add_resource(self, resource: ResourceQuantity):
-        return self.resources.operation_on_resource(resource, lambda x, y: x+y)
+        return self.add_resources(self.resources.resource_to_cost(resource))
 
     def remove_resource(self, resource: ResourceQuantity):
-        return self.resources.operation_on_resource(resource, lambda x, y: x-y)
+        return self.remove_resources(self.resources.resource_to_cost(resource))
 
     def remove_resources(self, cost: Cost):
         return self.resources.operation_on_resources(cost, lambda x, y: x.quantity - y)
+
+    def add_resources(self, cost: Cost):
+        return self.resources.operation_on_resources(cost, lambda x, y: x.quantity + y)
 
     def has_resources(self, cost: Cost):
         return self.resources.has_enough_resources(cost)

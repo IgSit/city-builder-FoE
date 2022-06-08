@@ -21,5 +21,9 @@ class Cost:
             ResourceType.PEOPLE: people_cost,
             ResourceType.WHEAT: wheat_cost,
             ResourceType.IRON: iron_cost,
-            ResourceType.WOOD: wood_cost
+            ResourceType.WOOD: wood_cost,
+            ResourceType.NULL: 0
         }
+
+    def to_string(self):
+        return list(self.cost_dict.values())

@@ -10,6 +10,7 @@ from src.main.gui.building_gui.BuildingGui import BuildingGui
 from src.main.gui.map_gui.MapGui import MapGui
 from src.main.buildings.BuildingsManager import BuildingsManager
 from src.main.gui.util_classes.Point import Point
+from src.main.technologies.TechnologiesManager import TechnologiesManager
 from src.main.work_modes.WorkModes import WorkMode
 
 
@@ -23,8 +24,9 @@ class BuilderGui:
         self.mode: Optional[str] = None
         self.tile_size: int = tile_size
         self.screen_width, self.screen_height = arcade.window_commands.get_display_size()
-        self.building_manager: BuildingsManager = BuildingsManager()
-        self.building_list_section = BuildingListSection(self, self.building_manager)
+        self.buildings_manager: BuildingsManager = BuildingsManager(engine)
+        self.technologies_manager = TechnologiesManager(engine, self.buildings_manager)
+        self.building_list_section = BuildingListSection(self, self.buildings_manager, self.technologies_manager)
 
         self._place_town()
 
@@ -50,7 +52,7 @@ class BuilderGui:
                 return
             self.work_mode = building.work_mode
             self.time_left = building.time_left
-            self.chosen_building = self.building_manager.get_copy_from_building(building)
+            self.chosen_building = self.buildings_manager.get_copy_from_building(building)
             self._set_chosen_building_sprite_coordinates(x, y)
         elif self.mode == "SELL":
             self._remove_building(x, y)
@@ -131,7 +133,7 @@ class BuilderGui:
         return a, building_gui.building_priority, (-1 + 2 * (building_gui.building_priority != 2)) * b
 
     def _place_town(self):
-        self.chosen_building = self.building_manager.get_copy(len(self.building_manager.buildings) - 1)
+        self.chosen_building = self.buildings_manager.get_copy_by_name("town hall")
         self._place_building(0, 0)
 
     @staticmethod

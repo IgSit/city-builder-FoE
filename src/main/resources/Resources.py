@@ -9,17 +9,18 @@ class Resources:
     def __init__(self):
         self.money = ResourceQuantity(ResourceType.MONEY, 10000)
         self.supply = ResourceQuantity(ResourceType.SUPPLY, 10000)
-        self.people = ResourceQuantity(ResourceType.PEOPLE, 20)
-        self.wheat = ResourceQuantity(ResourceType.WHEAT, 0)
-        self.iron = ResourceQuantity(ResourceType.IRON, 0)
-        self.wood = ResourceQuantity(ResourceType.WOOD, 10)
+        self.people = ResourceQuantity(ResourceType.PEOPLE, 120)
+        self.wheat = ResourceQuantity(ResourceType.WHEAT, 120)
+        self.iron = ResourceQuantity(ResourceType.IRON, 120)
+        self.wood = ResourceQuantity(ResourceType.WOOD, 120)
         self.resources_dict = {
             ResourceType.MONEY: self.money,
             ResourceType.SUPPLY: self.supply,
             ResourceType.PEOPLE: self.people,
             ResourceType.WHEAT: self.wheat,
             ResourceType.IRON: self.iron,
-            ResourceType.WOOD: self.wood
+            ResourceType.WOOD: self.wood,
+            ResourceType.NULL: ResourceQuantity(ResourceType.NULL, 0)
         }
 
     def has_enough_resources(self, cost: Cost):
@@ -47,9 +48,16 @@ class Resources:
             self.wood.quantity
         )
 
+    def resource_to_cost(self, good: ResourceQuantity):
+        vals = [good.quantity if good.resource == resource else 0 for resource in self.resources_dict.keys()][:-1]
+        return Cost(*vals)
+
+    def to_string(self):
+        return f'M:{self.money.quantity} S:{self.supply.quantity} P:{self.people.quantity} ' \
+               f'WH:{self.wheat.quantity} I:{self.iron.quantity} W:{self.wood.quantity}'
+
     def operation_on_resource(self, good: ResourceQuantity, func):
-        self.resources_dict[good.resource].quantity = \
-            func(self.resources_dict[good.resource].quantity, good.quantity)
+        self.operation_on_resources(self.resource_to_cost(good), func)
 
     def operation_on_resources(self, cost: Cost, func):
         for type_, good in self.resources_dict.items():

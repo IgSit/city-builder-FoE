@@ -4,6 +4,7 @@ import arcade.gui
 from src.main.buildings.BuildingsManager import BuildingsManager
 from src.main.gui.util_classes.Button import Button
 from src.main.gui.util_classes.Point import Point
+from src.main.technologies.TechnologiesManager import TechnologiesManager
 
 PANEL_WIDTH = 320
 PANEL_HEIGHT = 600
@@ -13,7 +14,7 @@ SCREEN_HEIGHT = 0
 
 class BuildingListSection(arcade.View):
 
-    def __init__(self, builder_gui, buildings_manager: BuildingsManager):
+    def __init__(self, builder_gui, buildings_manager: BuildingsManager, technologies_manager: TechnologiesManager):
         global SCREEN_WIDTH, SCREEN_HEIGHT
 
         super().__init__()
@@ -21,7 +22,7 @@ class BuildingListSection(arcade.View):
         SCREEN_HEIGHT = self.window.height
         self.builder_gui = builder_gui
         self.buildings_manager = buildings_manager
-        self.panel = Panel(builder_gui, buildings_manager,
+        self.panel = Panel(builder_gui, buildings_manager, technologies_manager,
                            left=(self.window.width - PANEL_WIDTH), bottom=100,
                            width=(PANEL_WIDTH - 10), height=PANEL_HEIGHT,
                            prevent_dispatch={True}, prevent_dispatch_view={True})
@@ -35,11 +36,12 @@ class BuildingListSection(arcade.View):
 class Panel(arcade.Section):
     """Panel to the right where buildings with build buttons are shown (so-called cards)."""
 
-    def __init__(self, builder_gui, buildings_manager,
+    def __init__(self, builder_gui, buildings_manager, technologies_manager,
                  left: int, bottom: int, width: int, height: int, **kwargs):
         super().__init__(left, bottom, width, height, **kwargs)
         self.builder_gui = builder_gui
         self.buildings_manager = buildings_manager
+        self.technologies_manager = technologies_manager
         self.cards = self._create_cards()
         self.start_Ind = 0
         self.end_Ind = 6
@@ -84,16 +86,17 @@ class Panel(arcade.Section):
     def _create_cards(self):
         cards = []
         for i in range(len(self.buildings_manager.buildings) - 1):
-            cards.append(Card(self.builder_gui, self.buildings_manager, i))
+            cards.append(Card(self.builder_gui, self.buildings_manager, self.technologies_manager, i))
         return cards
 
 
 class Card:
     """Single 'card' containing building sprite and its 'build' button."""
 
-    def __init__(self, builder_gui, buildings_manager, i: int):
+    def __init__(self, builder_gui, buildings_manager, technologies_manager: TechnologiesManager, i: int):
         self.builder_gui = builder_gui
         self.buildings_manager = buildings_manager
+        self.technologies_manager = technologies_manager
 
         lower_left = self._calc_position(i)
         upper_right = lower_left.add(Point(140, 30))
@@ -101,15 +104,17 @@ class Card:
         self.building_gui = self.buildings_manager.get_copy(i)
         self.button = Button(self.building_gui.building.name, lower_left, upper_right,
                              click_function=self.choose_building, idx=i)
-        self.sprite = self.building_gui.sprite
+        self.sprite = self.building_gui.normal_sprite
         self.sprite.scale = 0.5
         self.sprite.left = lower_left.x + 35
         self.sprite.bottom = upper_right.y + 15
 
     def choose_building(self, i: int):
+        building = self.buildings_manager.buildings[i].building
         if self.builder_gui.chosen_building is not None:
             self.builder_gui.chosen_building = None
-        else:
+        elif building.is_road() or \
+                self.technologies_manager.technologies_dict[building.name].unlocked:
             self.builder_gui.chosen_building = self.buildings_manager.get_copy(i)
             self.builder_gui.chosen_building.sprite.bottom = 800
 

@@ -17,7 +17,8 @@ class Gui(arcade.Window):
         self.market_section = MarketSection(engine)
         self.map_gui = MapGui(engine)
         self.builder_gui = BuilderGui(self.map_gui, engine)
-        self.tech_section = TechnologiesSection(self.builder_gui.building_manager, engine)
+        self.tech_section = TechnologiesSection(self.builder_gui.buildings_manager,
+                                                self.builder_gui.technologies_manager, engine)
         self.controls_gui = ControlsGui(self.builder_gui, self.map_gui, self.market_section, self.tech_section,
                                         self.engine)
         self.work_mode_gui = WorkModeGui(self.map_gui, self.builder_gui, self.engine)

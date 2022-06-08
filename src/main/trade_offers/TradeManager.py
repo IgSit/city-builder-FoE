@@ -1,4 +1,4 @@
-from src.main.engine import Engine
+from src.main.engine.Engine import Engine
 from src.main.resources.Goods import ResourceQuantity, ResourceType
 
 
