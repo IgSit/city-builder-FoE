@@ -17,7 +17,7 @@ class BuildingGui:
         self.non_road_sprite = None
         if asset_non_road_path != "":
             self.non_road_sprite = arcade.Sprite(asset_non_road_path, scale=0.7)
-            self.sprite = self.non_road_sprite
+            # self.sprite = self.non_road_sprite
         self.building_priority = {(1, 1): 0, (2, 1): 1, (1, 2): 2, (2, 2): 3}[(self.building.dimensions.width,
                                                                                self.building.dimensions.length)]
 
