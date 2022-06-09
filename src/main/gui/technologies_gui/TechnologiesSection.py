@@ -89,9 +89,9 @@ class TechnologiesCard:
 
         state = self._postfix(self.technology_branch.basic.unlocked)
         self.building_gui_basic = self.buildings_manager.get_copy_by_name(self.technology_branch.basic.name)
-        self.button_basic = Button(self.technology_branch.basic.name+state, lower_left, upper_right,
-                             click_function=self.technology_branch.basic.unlock, idx=i)
-        self.sprite_basic = self.building_gui_basic.normal_sprite
+        self.button_basic = Button(self.technology_branch.basic.name + state, lower_left, upper_right,
+                                   click_function=self.technology_branch.basic.unlock, idx=i)
+        self.sprite_basic = self.building_gui_basic.sprite
         self.sprite_basic.scale = 0.5
         self.sprite_basic.left = lower_left.x + 50
         self.sprite_basic.bottom = upper_right.y + 15
@@ -100,10 +100,11 @@ class TechnologiesCard:
         lower_left.y -= distance
 
         state = self._postfix(self.technology_branch.intermediate.unlocked)
-        self.building_gui_intermediate = self.buildings_manager.get_copy_by_name(self.technology_branch.intermediate.name)
-        self.button_intermediate = Button(self.technology_branch.intermediate.name+state, lower_left, upper_right,
-                             click_function=self.technology_branch.intermediate.unlock, idx=i+1)
-        self.sprite_intermediate = self.building_gui_intermediate.normal_sprite
+        self.building_gui_intermediate = self.buildings_manager.get_copy_by_name(
+            self.technology_branch.intermediate.name)
+        self.button_intermediate = Button(self.technology_branch.intermediate.name + state, lower_left, upper_right,
+                                          click_function=self.technology_branch.intermediate.unlock, idx=i + 1)
+        self.sprite_intermediate = self.building_gui_intermediate.sprite
         self.sprite_intermediate.scale = 0.5
         self.sprite_intermediate.left = lower_left.x + 50
         self.sprite_intermediate.bottom = upper_right.y + 15
@@ -113,9 +114,9 @@ class TechnologiesCard:
 
         state = self._postfix(self.technology_branch.advanced.unlocked)
         self.building_gui_advanced = self.buildings_manager.get_copy_by_name(self.technology_branch.advanced.name)
-        self.button_advanced = Button(self.technology_branch.advanced.name+state, lower_left, upper_right,
-                             click_function=self.technology_branch.advanced.unlock, idx=i+2)
-        self.sprite_advanced = self.building_gui_advanced.normal_sprite
+        self.button_advanced = Button(self.technology_branch.advanced.name + state, lower_left, upper_right,
+                                      click_function=self.technology_branch.advanced.unlock, idx=i + 2)
+        self.sprite_advanced = self.building_gui_advanced.sprite
         self.sprite_advanced.scale = 0.5
         self.sprite_advanced.left = lower_left.x + 50
         self.sprite_advanced.bottom = upper_right.y + 15
@@ -145,5 +146,5 @@ class TechnologiesCard:
 
     @staticmethod
     def _calc_position(i: int):
-        return Point((SCREEN_WIDTH - PANEL_WIDTH)//2 + i * 200,
-                     PANEL_HEIGHT - (SCREEN_HEIGHT - PANEL_HEIGHT)//2)
+        return Point((SCREEN_WIDTH - PANEL_WIDTH) // 2 + i * 200,
+                     PANEL_HEIGHT - (SCREEN_HEIGHT - PANEL_HEIGHT) // 2)

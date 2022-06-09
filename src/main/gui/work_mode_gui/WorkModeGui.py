@@ -23,7 +23,6 @@ class WorkModeGui:
         else:
             self.work_mode_section.disable_buttons()
 
-
     def on_mouse_press(self):
         if self.builder_gui.mode is None:
             cords = self.map_gui.find_field_under_cursor()
