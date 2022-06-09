@@ -49,13 +49,13 @@ class MapGui:
         self.find_field_under_cursor()
 
         for building in self.map_buildings:
-          if building.building.connected_to_town or building.non_road_sprite is None:
-              building.sprite = building.normal_sprite
-          else:
-              building.sprite = building.non_road_sprite
-          building.sprite.center_x = building.screen_coordinates.x + self.offset.x
-          building.sprite.bottom = building.screen_coordinates.y + self.offset.y
-          building.sprite.draw()
+            if building.building.connected_to_town or building.non_road_sprite is None:
+                building.sprite = building.normal_sprite
+            else:
+                building.sprite = building.non_road_sprite
+            building.sprite.center_x = building.screen_coordinates.x + self.offset.x
+            building.sprite.bottom = building.screen_coordinates.y + self.offset.y
+            building.sprite.draw()
 
     def on_update(self, dt: float):
         for building_gui in self.map_buildings:
@@ -112,8 +112,8 @@ class MapGui:
 
     def remove_building_sprite(self, sprite: arcade.sprite):
         for building in self.map_buildings:
-          if building.sprite is sprite:
-              self.map_buildings.remove(building)
+            if building.sprite is sprite or building.non_road_sprite is sprite:
+                self.map_buildings.remove(building)
 
     def _update_background_coords(self):
         self.background_sprite.center_x = self.screen_width / 2 + self.offset.x

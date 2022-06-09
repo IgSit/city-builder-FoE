@@ -121,8 +121,6 @@ class BuilderGui:
         building_list = arcade.SpriteList()
         for building_gui in self.map_gui.map_buildings:
             building_list.append(building_gui.sprite)
-            if building_gui.non_road_sprite is not None:
-                building_list.append(building_gui.non_road_sprite)
 
         hit_buildings = arcade.get_sprites_at_point((x, y), building_list)
         self.map_gui.remove_building_sprite(hit_buildings[0])
