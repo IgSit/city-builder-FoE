@@ -49,9 +49,14 @@ class MapGui:
         self.find_field_under_cursor()
 
         for building in self.map_buildings:
-            building.sprite.center_x = building.screen_coordinates.x + self.offset.x
-            building.sprite.bottom = building.screen_coordinates.y + self.offset.y
-            building.sprite.draw()
+            if building.building.connected_to_town or building.non_road_sprite is None:
+                building.sprite.center_x = building.screen_coordinates.x + self.offset.x
+                building.sprite.bottom = building.screen_coordinates.y + self.offset.y
+                building.sprite.draw()
+            else:
+                building.non_road_sprite.center_x = building.screen_coordinates.x + self.offset.x
+                building.non_road_sprite.bottom = building.screen_coordinates.y + self.offset.y
+                building.non_road_sprite.draw()
 
     def on_update(self, dt: float):
         for building_gui in self.map_buildings:

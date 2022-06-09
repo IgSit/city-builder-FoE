@@ -104,7 +104,7 @@ class Card:
         self.building_gui = self.buildings_manager.get_copy(i)
         self.button = Button(self.building_gui.building.name, lower_left, upper_right,
                              click_function=self.choose_building, idx=i)
-        self.sprite = self.building_gui.normal_sprite
+        self.sprite = self.building_gui.sprite
         self.sprite.scale = 0.5
         self.sprite.left = lower_left.x + 35
         self.sprite.bottom = upper_right.y + 15
