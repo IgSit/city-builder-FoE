@@ -113,7 +113,7 @@ class MapGui:
 
     def remove_building_sprite(self, sprite: arcade.sprite):
         for building in self.map_buildings:
-            if building.sprite == sprite:
+            if building.sprite == sprite or building.non_road_sprite == sprite:
                 self.map_buildings.remove(building)
 
     def _update_background_coords(self):

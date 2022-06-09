@@ -18,7 +18,10 @@ class WorkModeGui:
 
     def on_draw(self):
         if self.set_work_mode:
+            self.work_mode_section.enable_buttons()
             self.work_mode_section.on_draw()
+        else:
+            self.work_mode_section.disable_buttons()
 
     def on_mouse_press(self):
         if self.builder_gui.mode is None:

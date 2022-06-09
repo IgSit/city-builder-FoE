@@ -32,6 +32,8 @@ class TechnologiesSection(arcade.View):
     def on_draw(self):
         if self._tech_mode:
             self.panel.on_draw()
+        else:
+            self.on_quit()
 
     def on_quit(self):
         self.panel.on_quit()
