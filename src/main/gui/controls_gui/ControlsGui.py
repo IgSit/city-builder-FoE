@@ -38,7 +38,7 @@ class ControlsGui(arcade.View):
 
     def _draw_resources(self):
         self.resources = self.engine.get_resources()
-        width, height, separator = 70, 25, 20
+        width, height, separator = 100, 25, 20
         texts = ["M: " + str(self.resources.money_cost), "S: " + str(self.resources.supply_cost),
                  "P: " + str(self.resources.people_cost), "WH: " + str(self.resources.wheat_cost),
                  "I: " + str(self.resources.iron_cost), "W: " + str(self.resources.wood_cost),

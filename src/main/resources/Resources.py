@@ -9,10 +9,10 @@ class Resources:
     def __init__(self):
         self.money = ResourceQuantity(ResourceType.MONEY, 10000)
         self.supply = ResourceQuantity(ResourceType.SUPPLY, 10000)
-        self.people = ResourceQuantity(ResourceType.PEOPLE, 120)
-        self.wheat = ResourceQuantity(ResourceType.WHEAT, 120)
-        self.iron = ResourceQuantity(ResourceType.IRON, 120)
-        self.wood = ResourceQuantity(ResourceType.WOOD, 120)
+        self.people = ResourceQuantity(ResourceType.PEOPLE, 50)
+        self.wheat = ResourceQuantity(ResourceType.WHEAT, 1120)
+        self.iron = ResourceQuantity(ResourceType.IRON, 1120)
+        self.wood = ResourceQuantity(ResourceType.WOOD, 1120)
         self.resources_dict = {
             ResourceType.MONEY: self.money,
             ResourceType.SUPPLY: self.supply,

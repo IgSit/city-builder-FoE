@@ -126,15 +126,9 @@ class TechnologiesCard:
             button.rename(tech.name + self._postfix(tech.unlocked))
             button.enabled = True
             button.draw_button()
-        # self.button_basic.enabled = True
-        # self.button_intermediate.enabled = True
-        # self.button_advanced.enabled = True
         self.sprite_basic.draw()
-        # self.button_basic.draw_button()
         self.sprite_intermediate.draw()
-        # self.button_intermediate.draw_button()
         self.sprite_advanced.draw()
-        # self.button_advanced.draw_button()
 
     def on_quit(self):
         self.button_basic.enabled = False
