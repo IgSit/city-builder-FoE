@@ -30,7 +30,20 @@ class WorkModeSection(arcade.View):
 
     def on_draw(self):
         if self._work_mode:
+            self.enable_buttons()
             self.panel.on_draw()
+        else:
+            self.disable_buttons()
+
+    def disable_buttons(self):
+        cards = self.panel.cards
+        for card in cards:
+            card.button.enabled = False
+
+    def enable_buttons(self):
+        cards = self.panel.cards
+        for card in cards:
+            card.button.enabled = True
 
 
 class WorkModePanel(arcade.Section):
