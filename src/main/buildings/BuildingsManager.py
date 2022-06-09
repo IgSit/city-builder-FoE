@@ -87,4 +87,4 @@ class BuildingsManager:
     def get_copy_from_building(self, building: AbstractBuilding):
         if building is None:
             return
-        return self.buildings_dict.get(building.name)
+        return deepcopy(self.buildings_dict.get(building.name))
